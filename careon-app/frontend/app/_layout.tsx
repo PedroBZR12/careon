@@ -1,29 +1,40 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
+// app/_layout.tsx
+import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
+import { ThemeProvider, DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { useColorScheme } from '../src/hooks/useColorScheme';
+import { useFonts } from 'expo-font';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
+  // Carregar fontes
   const [loaded] = useFonts({
     SpaceMono: require('../src/assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          {/* Tela inicial: login */}
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+
+          {/* Abas do app */}
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+          {/* Tela de registro */}
+          <Stack.Screen name="register" options={{ title: 'Registrar' }} />
+
+          {/* Tela de erro, caso rota não exista */}
+          <Stack.Screen name="+not-found" options={{ title: 'Página não encontrada' }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }
