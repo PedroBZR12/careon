@@ -75,24 +75,15 @@ WSGI_APPLICATION = 'backcareon.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-#configuração do banco de dados comentado
-"""             
-DATABASES = {
-    'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nome_do_banco',
+        'NAME': '',
         'USER': 'usuario',
         'PASSWORD': 'senha',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
-"""
+
 
 
 # Password validation
