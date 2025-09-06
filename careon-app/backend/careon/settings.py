@@ -38,10 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'corsheaders',
-    'appointments',
-    'medications',
-    'users',
+    #'corsheaders',
+    'apps.appointments',
+    'apps.medications',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -52,11 +52,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',#cors
+    #'corsheaders.middleware.CorsMiddleware',#cors
     'django.middleware.common.CommonMiddleware',#ajuste de url
 ]
 
-ROOT_URLCONF = 'backcareon.urls'
+ROOT_URLCONF = 'careon.urls'
 
 TEMPLATES = [
     {
@@ -73,12 +73,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backcareon.wsgi.application'
+WSGI_APPLICATION = 'careon.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -87,6 +87,13 @@ DATABASES = {
         'PASSWORD': 'senha',
         'HOST': 'localhost',
         'PORT': '5432',
+    }
+}
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',   # backend do banco
+        'NAME': BASE_DIR / 'db.sqlite3',          # arquivo do banco (fica na raiz do projeto)
     }
 }
 
@@ -145,7 +152,9 @@ REST_FRAMEWORK = {
     ],
 }
 
+"""""
 #compatibilidade com o react
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
+"""
