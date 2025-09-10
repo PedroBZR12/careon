@@ -54,6 +54,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     gap: 12,
-
+    
   },
 });

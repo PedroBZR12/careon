@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 
+
 # Cadastro
 class RegisterView(APIView):
     def post(self, request):

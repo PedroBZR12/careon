@@ -2,11 +2,16 @@ import React from "react";
 import { View, Text, TextInput, Alert, Image, Platform, Button } from "react-native";  
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
-
+import api from "../services/api";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { useRouter } from "expo-router";
 
 export default function RegisterScreen() {
+  const navigation = useNavigation();
+  const router = useRouter();
+  const [username, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [gender, setGender] = React.useState("");
@@ -29,18 +34,56 @@ export default function RegisterScreen() {
     }
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!email || !password || !gender || !birthday || !phone) {
       Alert.alert("Erro", "Preencha todos os campos");
       return;
     }
-    Alert.alert('Registrar', `Email: ${email}\nSenha: ${password}`);
-    // Aqui você pode navegar para a tela de login
-  };
+    
+    try{
+      const response = await api.post('/users/register/', {
+        username,
+        email,
+        password,
+        gender,
+        birthday,
+        phone
+      
+    });
 
+    const token = response.data.token;
+
+    // Salva token localmente
+    await AsyncStorage.setItem('userToken', token);
+
+
+    Alert.alert('Sucesso', 'Cadastro realizado!');
+
+    router.push('/homeScreen')
+
+  } catch (error: any){
+    console.error(error);
+    Alert.alert('Erro', error.response?.data?.message || 'Erro no servidor');
+  }
+}
   return (
     <View style={[GlobalStyles.container, GlobalStyles.center]}>
       <Text style={GlobalStyles.title}>Faça seu cadastro:</Text>
+
+      <TextInput
+        placeholder="Nome completo"
+        value={username}
+        onChangeText={setName}
+        autoCapitalize="none"
+        style={{
+          width: '80%',
+          padding: 10,
+          borderWidth: 1,
+          borderColor: Colors.muted,
+          borderRadius: 8,
+          marginTop: 20,
+        }}
+      />
 
       <TextInput
         placeholder="Email"
@@ -91,7 +134,7 @@ export default function RegisterScreen() {
         <Button onPress={() => setShow(true)} title="Selecionar data de nascimento" />
       </View>
       {show && (
-        <DateTimePicker style={{ width: '80%', marginTop: 10, backgroundColor: Colors.muted, borderRadius: 8 }}
+        <DateTimePicker style={{ width: '80%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
           value={date}
           mode="date"
           display="spinner"
