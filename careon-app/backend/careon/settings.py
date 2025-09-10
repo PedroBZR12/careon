@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
     'rest_framework',
-    #'corsheaders',
+    'corsheaders',
     'apps.appointments',
     'apps.medications',
     'apps.users',
@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'corsheaders.middleware.CorsMiddleware',#cors
+    'corsheaders.middleware.CorsMiddleware',#cors
     'django.middleware.common.CommonMiddleware',#ajuste de url
 ]
 
@@ -156,9 +156,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-"""""
 #compatibilidade com o react
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
-"""
