@@ -11,12 +11,9 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
-          {/* Login como primeira tela */}
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-
-          {/* As abas serão gerenciadas automaticamente pelo _layout.tsx dentro de (tabs) */}
-          <Stack.Screen name="(tabs)/index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)/register" options={{ headerShown: true, title: 'Registrar' }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} /> {/* Login */}
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> {/* Abas */}
+          <Stack.Screen name="register" options={{ title: 'Registrar' }} /> {/* Registro */}
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

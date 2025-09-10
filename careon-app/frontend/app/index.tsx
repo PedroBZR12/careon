@@ -14,6 +14,7 @@ export default function LoginScreen() {
       return;
     }
     Alert.alert('Login', `Email: ${email}\nSenha: ${password}`);
+    router.push("/homeScreen");
     // Aqui você pode navegar para as abas
   };
 

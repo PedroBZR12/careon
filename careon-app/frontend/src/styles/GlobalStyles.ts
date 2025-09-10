@@ -26,6 +26,18 @@ export const GlobalStyles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 100,
   },
+   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profilePic: {
+    width: 60,
+    height: 60,
+    borderRadius: 30, // deixa a imagem redonda
+    backgroundColor: '#ddd', // cinza caso não carregue a imagem
+  },
   center: {
     justifyContent: 'center',
     alignItems: 'center',
