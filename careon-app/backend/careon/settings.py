@@ -92,11 +92,19 @@ DATABASES = {
 }
 """
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',   # backend do banco
-        'NAME': BASE_DIR / 'db.sqlite3',          # arquivo do banco (fica na raiz do projeto)
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": "db.gzgmekduejldtusbxbmp.supabase.co",
+        "PORT": "5432",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": "zAzIkY6q2w5naRjz",  # sem colchetes!
+        "OPTIONS": {
+            "sslmode": "require",  # Supabase exige SSL
+        },
     }
 }
+
 
 
 

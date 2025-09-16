@@ -14,8 +14,18 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "email", "password", "birthday", "gender", "phone"]
 
+    
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("Este username já está em uso.")
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Este email já está em uso.")
+        return value
+
     def validate(self, data):
-        # Garantir que nenhum campo está vazio
         required_fields = ["username", "email", "password", "birthday", "gender", "phone"]
         for field in required_fields:
             if not data.get(field):
@@ -27,14 +37,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         birthday = validated_data.pop("birthday")
         gender = validated_data.pop("gender")
         phone = validated_data.pop("phone")
-
+        email = validated_data.pop("email")
         # Cria usuário
         validated_data["password"] = make_password(validated_data["password"])
-        user = super().create(validated_data)
+        user = User.objects.create(**validated_data)
 
         # Cria perfil com os campos extras
         UserProfile.objects.create(
             user=user,
+            email=email,
             birthday=birthday,
             gender=gender,
             phone=phone

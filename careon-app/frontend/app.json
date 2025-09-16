@@ -8,6 +8,9 @@
     "scheme": "careon",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "extra": {
+      "EXPO_ROUTER_APP_ROOT": "./app"
+    },
     "ios": {
       "supportsTablet": true
     },

@@ -2,12 +2,13 @@ import React from "react";
 import { View, Text, TextInput, Alert, Image } from "react-native";  
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
-import { router } from "expo-router";
+import {  useRouter } from "expo-router";
 
 export default function LoginScreen() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-
+  const router = useRouter();
+  
   const handleLogin = () => {
     if (!email || !password) {
       Alert.alert("Erro", "Preencha todos os campos");

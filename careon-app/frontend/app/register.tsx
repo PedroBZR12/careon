@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from "expo-router";
+import { Picker } from "@react-native-picker/picker";
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
@@ -26,21 +27,28 @@ export default function RegisterScreen() {
       setShow(false);
     
     if (selectedDate) {
-      setDate(selectedDate);
-      const day = selectedDate.getDate().toString().padStart(2, '0');
-      const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
-      const year = selectedDate.getFullYear();
-      setBirthday(`${day}/${month}/${year}`);
-    }
+      const isoDate = selectedDate.toISOString().slice(0, 10);
+      setBirthday(isoDate);
+      console.log('Birthday formatado:', isoDate); // debug
+      }
   };
 
   const handleRegister = async () => {
-    if (!email || !password || !gender || !birthday || !phone) {
+    
+    if (!username || !email || !password || !gender || !birthday || !phone) {
       Alert.alert("Erro", "Preencha todos os campos");
       return;
     }
     
     try{
+        console.log({
+        username,
+        email,
+        password,
+        gender,
+        birthday,
+        phone
+      });
       const response = await api.post('/users/register/', {
         username,
         email,
@@ -48,8 +56,10 @@ export default function RegisterScreen() {
         gender,
         birthday,
         phone
-      
+        
     });
+  console.log('passou');
+    console.log('Resposta do cadastro:', response.data);
 
     const token = response.data.token;
 
@@ -62,7 +72,11 @@ export default function RegisterScreen() {
     router.push('/homeScreen')
 
   } catch (error: any){
-    console.error(error);
+    const data = error.response?.data;
+    console.log('Error.response.data:', error.response?.data);
+    if (data?.email) Alert.alert("Erro", data.email[0]);
+    else if (data?.username) Alert.alert("Erro", data.username[0]);
+    else Alert.alert("Erro", "Erro no cadastro");
     Alert.alert('Erro', error.response?.data?.message || 'Erro no servidor');
   }
 }
@@ -116,22 +130,32 @@ export default function RegisterScreen() {
         }}
       />
 
-      <TextInput
-        placeholder="Gênero"
-        value={gender}
-        onChangeText={setGender}
-        style={{
-          width: '80%',
-          padding: 10,
-          borderWidth: 1,
-          borderColor: Colors.muted,
-          borderRadius: 8,
-          marginTop: 10,
-        }}
-      />
+      <View style={{width: '80%', 
+                    marginTop: 10, 
+                    borderColor: Colors.muted, 
+                    borderWidth: 1, 
+                    borderRadius: 8, 
+                    padding: 5,
+                    height: 80
 
-      <View style={{ width: '80%', padding: 10, backgroundColor: Colors.muted, borderRadius: 8, marginTop: 10, alignItems: 'center' }}>
-        <Button onPress={() => setShow(true)} title="Selecionar data de nascimento" />
+      }}>
+        <Text>Selecione seu gênero:</Text>
+        <Picker
+          selectedValue={gender}
+          onValueChange={(itemValue) => setGender(itemValue)}
+          style={{height: 60, width: '100%', padding: 10}}
+          mode="dropdown"
+        >
+          <Picker.Item label="Selecione" value="" />
+          <Picker.Item label="Masculino" value="male" />
+          <Picker.Item label="Feminino" value="female" />
+          <Picker.Item label="Outro" value="other" />
+        </Picker>
+      </View>
+
+      <View style={{ width: '80%', padding: 10,
+       borderRadius: 8, marginTop: 10, alignItems: 'center' }}>
+        <Button onPress={() => setShow(true)} title={birthday ? birthday : "Selecionar data de nascimento"} />
       </View>
       {show && (
         <DateTimePicker style={{ width: '80%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
