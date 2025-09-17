@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
+import { useAuth } from "../src/hooks/useAuth";
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
@@ -20,7 +21,8 @@ export default function RegisterScreen() {
   const [show, setShow] = React.useState(false);
   const [birthday, setBirthday] = React.useState("");
   const [phone, setPhone] = React.useState("");
-
+  const [showPassword, setShowPassword] = React.useState(false);
+  const { register, isLoading } = useAuth();
 
   const onChange = (event: any, selectedDate?: Date) => {
     if(Platform.OS === 'android')
@@ -31,6 +33,10 @@ export default function RegisterScreen() {
       setBirthday(isoDate);
       console.log('Birthday formatado:', isoDate); // debug
       }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleRegister = async () => {
@@ -115,20 +121,47 @@ export default function RegisterScreen() {
         }}
       />
 
-      <TextInput
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={{
-          width: '80%',
-          padding: 10,
-          borderWidth: 1,
-          borderColor: Colors.muted,
-          borderRadius: 8,
-          marginTop: 10,
-        }}
-      />
+      <View style={{
+        width: '80%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+        borderWidth: 1,
+        borderColor: Colors.muted,
+        borderRadius: 8,
+        opacity: isLoading ? 0.6 : 1,
+      }}>
+        <TextInput
+          placeholder="Senha"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword} // ← CONTROLA SE MOSTRA OU ESCONDE
+          editable={!isLoading}
+          style={{
+            flex: 1,
+            padding: 10,
+            borderWidth: 0, // Remove border porque está no container
+          }}
+        />
+        
+        {/* ← BOTÃO PARA MOSTRAR/ESCONDER SENHA */}
+        <TouchableOpacity
+          onPress={togglePasswordVisibility}
+          style={{
+            padding: 10,
+            paddingHorizontal: 15,
+          }}
+          disabled={isLoading}
+        >
+          <Text style={{
+            color: Colors.primary,
+            fontSize: 12,
+            fontWeight: 'bold'
+          }}>
+            {showPassword ? 'OCULTAR' : 'MOSTRAR'}
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <View style={{width: '80%', 
                     marginTop: 10, 

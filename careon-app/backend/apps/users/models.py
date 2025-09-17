@@ -5,8 +5,9 @@ from rest_framework import serializers
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    birthday = models.DateField()
+    email = models.EmailField(default='')
     gender = models.CharField(max_length=20)
+    birthday = models.DateField()
     phone = models.CharField(max_length=20)
 
     def __str__(self):

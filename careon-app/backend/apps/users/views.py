@@ -22,7 +22,7 @@ class RegisterView(APIView):
 # Login
 class LoginView(APIView):
     def post(self, request):
-        username = request.data.get("username")
+        email = request.data.get("email")
         password = request.data.get("password")
 
         user = authenticate(username=username, password=password)
