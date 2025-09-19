@@ -24,9 +24,31 @@ class LoginView(APIView):
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
-
-        user = authenticate(username=username, password=password)
-        if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key}, status=status.HTTP_200_OK)
-        return Response({"error": "Credenciais inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
+        print(request.data)
+        
+        if not email or not password:
+            return Response(
+                {"error": "Email e senha são obrigatórios"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        user = authenticate(request, email=email, password=password)
+        if not user:
+            return Response(
+                {"error": "Credenciais inválidas"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response({
+            "token": token.key,
+            "user": {                    
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            }
+        }, status=status.HTTP_200_OK)
+        
+        

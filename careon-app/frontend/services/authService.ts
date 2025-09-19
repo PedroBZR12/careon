@@ -3,11 +3,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const authService = {
     // Login usando rotas existentes
-    async login(username: string, password: string) {
+    async login(email: string, password: string) {
         try {
             // Faz POST para rota /login/
-            const response = await api.post('/login/', {
-                username,
+            const response = await api.post('/users/login/', {
+                email,
                 password
             });
             
@@ -38,7 +38,7 @@ export const authService = {
     }) {
         try {
             // Faz POST para rota /register/
-            const response = await api.post('/register/', userData);
+            const response = await api.post('/users/register/', userData);
             
             // API retorna: {"token": "abc123..."}
             const token = response.data.token;

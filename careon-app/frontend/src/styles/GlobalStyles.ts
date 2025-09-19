@@ -71,4 +71,16 @@ export const GlobalStyles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
   },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 6,
+    padding: 10,
+    marginBottom: 15,
+  },
+   medItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
 });

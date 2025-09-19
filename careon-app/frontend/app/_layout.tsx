@@ -30,10 +30,16 @@ export default function RootLayout() {
           {/* Tela de registro */}
           <Stack.Screen name="register" options={{ headerShown: false }} />
 
+          <Stack.Screen name="homeScreen" options={{ headerShown: false}}/>
+
           {/* Tela inicial */}
           <Stack.Screen name="home" options={{ headerShown: false }} />
           {/* Tela de erro, caso rota não exista */}
           <Stack.Screen name="+not-found" options={{ title: 'Página não encontrada' }} />
+
+          <Stack.Screen name="medicinesAdd" options={{headerShown: false}}/>
+          
+          <Stack.Screen name="manageMedicines" options={{headerShown: false}}/>
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
