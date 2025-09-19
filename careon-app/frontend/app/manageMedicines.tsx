@@ -13,7 +13,7 @@ export default function MedicationHomeScreen() {
   const navigation = useNavigation();
 
   const handleAddMedication = () => {
-    router.push('/')
+    router.push('/medicinesAdd')
   };
 
   return (
