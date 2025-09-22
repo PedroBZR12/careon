@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import requests
 
 class Remedio(models.Model):
     usuario = models.ForeignKey(
@@ -21,3 +22,64 @@ class Remedio(models.Model):
 
     def __str__(self):
         return self.name
+
+    def buscar_preco(remedio: str):
+        """
+        Busca os preços de um medicamento no site da Drogaria São Paulo
+        utilizando a API interna de busca.
+
+        Args:
+            remedio (str): Nome do medicamento a ser pesquisado (ex: "novalgina").
+
+        Returns:
+            list[dict]: Lista de até 5 dicionários, cada um contendo:
+                - "produto" (str): Nome do produto encontrado.
+                - "preco" (float | str): Preço do produto. Se não disponível, retorna "Não disponível".
+
+        Exemplo:
+            >>> buscar_preco("novalgina")
+            [
+                {"produto": "Novalgina 1g c/ 10 Comprimidos", "preco": 14.99},
+                {"produto": "Novalgina Solução Oral 100ml", "preco": 22.90},
+                {"produto": "Novalgina Gotas 20ml", "preco": 12.50},
+                {"produto": "Novalgina 500mg 30 Comprimidos", "preco": 29.90},
+                {"produto": "Novalgina 1g 20 Comprimidos", "preco": 25.40}
+            ]
+        """
+        url = "https://www.drogariasaopaulo.com.br/api/io/_v/api/intelligent-search/product_search/trade-policy/1"
+        params = {
+            "query": remedio,
+            "count": 5,   
+            "page": 1
+        }
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+            "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+            "Referer": "https://www.drogariasaopaulo.com.br/"
+        }
+
+        response = requests.get(url, params=params, headers=headers)
+
+        resultados = []
+        if response.status_code == 200:
+            data = response.json()
+            for product in data.get("products", [])[:5]:  
+                nome = product.get("productName", "Sem nome")
+                preco = None
+
+                if "items" in product and product["items"]:
+                    sellers = product["items"][0].get("sellers", [])
+                    if sellers:
+                        comm = sellers[0].get("commertialOffer", {})
+                        preco = comm.get("Price")
+
+                resultados.append({
+                    "produto": nome,
+                    "preco": preco if preco else "Não disponível"
+                })
+        else:
+            print(f"Erro ao acessar API ({remedio}): {response.status_code}")
+
+        return resultados
+
