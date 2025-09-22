@@ -23,7 +23,7 @@ class Remedio(models.Model):
     def __str__(self):
         return self.name
 
-    def buscar_preco(remedio: str):
+    def buscar_preco(remedio: str) -> list[dict[str, str | float]]:
         """
         Busca os preços de um medicamento no site da Drogaria São Paulo
         utilizando a API interna de busca.
@@ -35,21 +35,22 @@ class Remedio(models.Model):
             list[dict]: Lista de até 5 dicionários, cada um contendo:
                 - "produto" (str): Nome do produto encontrado.
                 - "preco" (float | str): Preço do produto. Se não disponível, retorna "Não disponível".
+                - "farmacia" (str): Nome da farmácia de onde foi coletado o preço.
 
         Exemplo:
             >>> buscar_preco("novalgina")
             [
-                {"produto": "Novalgina 1g c/ 10 Comprimidos", "preco": 14.99},
-                {"produto": "Novalgina Solução Oral 100ml", "preco": 22.90},
-                {"produto": "Novalgina Gotas 20ml", "preco": 12.50},
-                {"produto": "Novalgina 500mg 30 Comprimidos", "preco": 29.90},
-                {"produto": "Novalgina 1g 20 Comprimidos", "preco": 25.40}
+                {"produto": "Novalgina 1g c/ 10 Comprimidos", "preco": 14.99, "farmacia": "Drogaria São Paulo"},
+                {"produto": "Novalgina Solução Oral 100ml", "preco": 22.90, "farmacia": "Drogaria São Paulo"},
+                {"produto": "Novalgina Gotas 20ml", "preco": 12.50, "farmacia": "Drogaria São Paulo"},
+                {"produto": "Novalgina 500mg 30 Comprimidos", "preco": 29.90, "farmacia": "Drogaria São Paulo"},
+                {"produto": "Novalgina 1g 20 Comprimidos", "preco": 25.40, "farmacia": "Drogaria São Paulo"}
             ]
         """
         url = "https://www.drogariasaopaulo.com.br/api/io/_v/api/intelligent-search/product_search/trade-policy/1"
         params = {
             "query": remedio,
-            "count": 5,   
+            "count": 5,
             "page": 1
         }
 
@@ -64,7 +65,7 @@ class Remedio(models.Model):
         resultados = []
         if response.status_code == 200:
             data = response.json()
-            for product in data.get("products", [])[:5]:  
+            for product in data.get("products", [])[:5]:
                 nome = product.get("productName", "Sem nome")
                 preco = None
 
@@ -76,10 +77,11 @@ class Remedio(models.Model):
 
                 resultados.append({
                     "produto": nome,
-                    "preco": preco if preco else "Não disponível"
+                    "preco": preco if preco else "Não disponível",
+                    "farmacia": "Drogaria São Paulo"
                 })
         else:
-            print(f"Erro ao acessar API ({remedio}): {response.status_code}")
+            return [{"erro": "Não foi possível buscar os preços no momento."}]
 
         return resultados
-
+    
