@@ -10,6 +10,7 @@ export const authService = {
                 email,
                 password
             });
+            console.log("Resposta do login:", response.data); 
             
             // API Django retorna: {"token": "abc123..."}
             const token = response.data.token;
@@ -17,7 +18,7 @@ export const authService = {
             // Salva o token no celular
             await AsyncStorage.setItem('auth_token', token);
             
-            return { success: true, token };
+            return { success: true, token: response.data.token, user: response.data.user };
         } catch (error: any) {
             console.log('Erro no login:', error);
             

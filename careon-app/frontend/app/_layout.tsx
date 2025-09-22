@@ -40,6 +40,13 @@ export default function RootLayout() {
           <Stack.Screen name="medicinesAdd" options={{headerShown: false}}/>
           
           <Stack.Screen name="manageMedicines" options={{headerShown: false}}/>
+
+          <Stack.Screen name="removeMedication" options={{headerShown: false}}/>
+
+          <Stack.Screen name="chooseMedicineToUpdate" options={{headerShown: false}}/>
+          
+          <Stack.Screen name="updateMedication" options={{headerShown: false}}/>
+
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

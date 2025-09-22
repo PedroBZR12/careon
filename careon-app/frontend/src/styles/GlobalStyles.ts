@@ -60,6 +60,7 @@ export const GlobalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
+    width: '80%',
     color: '#fff',
     fontWeight: 'bold',
   },
@@ -72,6 +73,7 @@ export const GlobalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
+    width: '80%',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 6,
@@ -80,7 +82,36 @@ export const GlobalStyles = StyleSheet.create({
   },
    medItem: {
     padding: 10,
+    width: '80%',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+  },
+  daysContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+    flexWrap: 'wrap',
+  },
+  dayButton: {
+    width: '80%',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    backgroundColor: '#eee',
+    margin: 4,
+  },
+  dayButtonSelected: {
+    backgroundColor: '#007AFF',
+  },
+  dayText: {
+    color: '#333',
+  },
+  dayTextSelected: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  hourText: {
+    fontSize: 12,
+    color: '#666',
   },
 });

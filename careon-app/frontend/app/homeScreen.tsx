@@ -3,12 +3,25 @@ import React from 'react';
 import { View, Button, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 export default function CalendarTestScreen() {
   // Funções para cada botão — por enquanto só mostram no console
-  const handlePress = (buttonName: string) => {
+  const handlePress1 = () => {
+    router.push('/manageMedicines')
+  };
+  const handlePress2 = (buttonName: string) => {
     console.log(`Botão ${buttonName} pressionado`);
   };
+
+  const handlePress3 = (buttonName: string) => {
+    console.log(`Botão ${buttonName} pressionado`);
+  };
+
+  const handlePress4 = (buttonName: string) => {
+    console.log(`Botão ${buttonName} pressionado`);
+  };
+
 
   return (
     <View style={styles.container}>
@@ -29,10 +42,10 @@ export default function CalendarTestScreen() {
 
       {/* Botões */}
       <View style={styles.buttonContainer}>
-        <Button title="Gerenciar remédios" onPress={() => handlePress('1')} />
-        <Button title="Gerenciar compromisso de saúde" onPress={() => handlePress('2')} />
-        <Button title="Monitoramento da rotina" onPress={() => handlePress('3')} />
-        <Button title="Pesquisar remédios" onPress={() => handlePress('4')} />
+        <Button title="Gerenciar remédios" onPress={() => handlePress1()} />
+        <Button title="Gerenciar compromisso de saúde" onPress={() => handlePress2('2')} />
+        <Button title="Monitoramento da rotina" onPress={() => handlePress3('3')} />
+        <Button title="Pesquisar remédios" onPress={() => handlePress4('4')} />
       </View>
     </View>
   );

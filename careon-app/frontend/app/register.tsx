@@ -64,7 +64,6 @@ export default function RegisterScreen() {
         phone
         
     });
-  console.log('passou');
     console.log('Resposta do cadastro:', response.data);
 
     const token = response.data.token;
