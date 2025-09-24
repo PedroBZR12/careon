@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import RemedioCreateView, RemedioListView, RemedioDeleteView, RemedioUpdateView
+from .views import RemedioCreateView, RemedioListView, RemedioDeleteView, RemedioUpdateView, DailyChecklistView, MarkMedicationView
 
 
 urlpatterns = [
@@ -9,4 +9,6 @@ urlpatterns = [
     path('', RemedioListView.as_view(), name='remedio-list'),
     path('<int:pk>/delete/', RemedioDeleteView.as_view(), name='remedio-delete'),
     path('<int:pk>/update/', RemedioUpdateView.as_view(), name='remedio-update'),
+    path("checklist/", DailyChecklistView.as_view(), name="daily-checklist"),
+    path("checklist/mark/", MarkMedicationView.as_view(), name="mark-medication"),
 ]

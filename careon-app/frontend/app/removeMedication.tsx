@@ -14,7 +14,9 @@ type Medication = {
 export default function RemoveMedicinesScreen() {
   const [medications, setMedications] = useState<Medication[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const handleBack = () => {
+      router.push('/manageMedicines');
+  }
   const fetchMedications = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
@@ -88,6 +90,7 @@ export default function RemoveMedicinesScreen() {
         )}
         ListEmptyComponent={<Text>Nenhum medicamento cadastrado.</Text>}
       />
+      <Button title="Voltar" onPress={handleBack} />
     </View>
   );
 }

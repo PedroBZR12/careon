@@ -5,22 +5,28 @@ from rest_framework import status
 from .serializers import UserRegisterSerializer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
 
 
 
 # Cadastro
 class RegisterView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token, _ = Token.objects.get_or_create(user=user)
+            Token.objects.filter(user=user).delete()
+            token = Token.objects.create(user=user)
             return Response({"token": token.key}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # Login
 class LoginView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
     def post(self, request):
         email = request.data.get("email")
         password = request.data.get("password")
@@ -32,14 +38,16 @@ class LoginView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
             
-        user = authenticate(request, email=email, password=password)
+            
+        user = authenticate(request, username=email, password=password)
         if not user:
             return Response(
                 {"error": "Credenciais inválidas"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
         
-        token, _ = Token.objects.get_or_create(user=user)
+        Token.objects.filter(user=user).delete()
+        token = Token.objects.create(user=user)
         return Response({
             "token": token.key,
             "user": {                    

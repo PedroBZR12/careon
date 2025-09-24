@@ -13,7 +13,9 @@ export default function UpdateMedicationScreen() {
   const [time, setTime] = useState(initialTime as string);
   const [dosage, setDosage] = useState(initialDosage as string)
   const [frequency, setFrequency] = useState(initialFrequency as string)
-
+  const handleBack = () => {
+      router.push('/manageMedicines');
+    }
   const handleUpdate = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
@@ -69,7 +71,7 @@ export default function UpdateMedicationScreen() {
         borderRadius: 8, 
         padding: 5,
         height: 80
-
+      
       }}>
         <Text>Selecione os dias:</Text>
         <Picker
@@ -97,6 +99,7 @@ export default function UpdateMedicationScreen() {
       />
 
       <Button title="Salvar alterações" onPress={handleUpdate} />
+      <Button title="Voltar" onPress={handleBack} />
     </View>
   );
 }

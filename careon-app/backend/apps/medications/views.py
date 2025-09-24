@@ -2,8 +2,10 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, generics
-from .models import Remedio
-from .serializers import RemedioSerializer
+from .models import Remedio, Intake
+from .serializers import RemedioSerializer, IntakeSerializer
+from datetime import date
+from django.utils import timezone
 
 
 class RemedioCreateView(APIView):
@@ -22,7 +24,7 @@ class RemedioListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-
+        print("Usuário autenticado:", self.request.user, self.request.user.id)
         return Remedio.objects.filter(usuario=self.request.user)
     
     
@@ -53,7 +55,7 @@ class RemedioUpdateView(APIView):
             print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def patch(self, request, pk):       # se for apenas uma coisa que muda
+    def patch(self, request, pk):       
         try:
             remedio = Remedio.objects.get(pk=pk, usuario=request.user)
         except Remedio.DoesNotExist:
@@ -65,4 +67,55 @@ class RemedioUpdateView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
+class DailyChecklistView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        today = date.today()
+        usuario = request.user
+        remedios = Remedio.objects.filter(usuario=usuario)
+        intakes = Intake.objects.filter(usuario=usuario, data=today)
+        intake_map = {i.remedio_id: i.taken for i in intakes}
+
+       
+        data = []
+        for r in remedios:
+            data.append({
+                "id": r.id,
+                "name": r.name,
+                "dosage": r.dosage,
+                "day": r.day,
+                "time": r.time,
+                "taken": intake_map.get(r.id, False)
+            })
+
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class MarkMedicationView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        usuario = request.user
+        remedio_id = request.data.get("medication_id")
+        taken = request.data.get("taken", True)
+
+        if not remedio_id:
+            return Response({"error": "medication_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
+
+        today = date.today()
+
+        intake, created = Intake.objects.get_or_create(
+            usuario=usuario,
+            remedio_id=remedio_id,
+            data=today,
+            defaults={"taken": taken, "taken_at": timezone.now()}
+        )
+
+        if not created:
+            intake.taken = taken
+            intake.taken_at = timezone.now() if taken else None
+            intake.save()
+
+        serializer = IntakeSerializer(intake)
+        return Response(serializer.data, status=status.HTTP_200_OK)

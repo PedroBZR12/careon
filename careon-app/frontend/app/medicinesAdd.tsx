@@ -17,6 +17,9 @@ export default function AddMedicationScreen() {
   const [day, setDay] = useState('')
   const { token } = useAuth();
 
+  const handleBack = () => {
+        router.push('/manageMedicines');
+  }
 
 
   const handleSave = async () => {
@@ -66,12 +69,12 @@ export default function AddMedicationScreen() {
       
       
             <View style={{width: '80%', 
-                          marginTop: 10, 
-                          borderColor: Colors.muted, 
-                          borderWidth: 1, 
-                          borderRadius: 8, 
-                          padding: 5,
-                          height: 80
+              marginTop: 10, 
+              borderColor: Colors.muted, 
+              borderWidth: 1, 
+              borderRadius: 8, 
+              padding: 5,
+              height: 80
       
             }}>
               <Text>Selecione os dias:</Text>
@@ -115,7 +118,7 @@ export default function AddMedicationScreen() {
       />
 
       <Button title="Adicionar" onPress={handleSave} />
-      
+      <Button title="Voltar" onPress={handleBack} />
     </ScrollView>
   );
 }

@@ -33,16 +33,13 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        # Remove campos extras do validated_data
         birthday = validated_data.pop("birthday")
         gender = validated_data.pop("gender")
         phone = validated_data.pop("phone")
         email = validated_data.pop("email")
-        # Cria usuário
         validated_data["password"] = make_password(validated_data["password"])
         user = User.objects.create(**validated_data)
 
-        # Cria perfil com os campos extras
         UserProfile.objects.create(
             user=user,
             email=email,

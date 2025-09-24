@@ -16,6 +16,7 @@ export const authService = {
             const token = response.data.token;
             
             // Salva o token no celular
+            await AsyncStorage.removeItem('auth_token');
             await AsyncStorage.setItem('auth_token', token);
             
             return { success: true, token: response.data.token, user: response.data.user };
@@ -45,6 +46,7 @@ export const authService = {
             const token = response.data.token;
             
             // Salva o token (usuário já fica logado após registro)
+            await AsyncStorage.removeItem('auth_token');
             await AsyncStorage.setItem('auth_token', token);
             
             return { success: true, token };

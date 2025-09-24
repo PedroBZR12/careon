@@ -21,6 +21,9 @@ export default function MedicationHomeScreen() {
   const [selectedDay, setSelectedDay] = useState<string>("Segunda");
   const { token, isLoading } = useAuth();
   
+  const handleBack = () => {
+      router.push('/homeScreen');
+    }
 
   const fetchMedications = async () => {
 
@@ -129,7 +132,7 @@ export default function MedicationHomeScreen() {
           <Button title="Adicionar medicamento" onPress={handleAddMedication} />
           <Button title="Atualizar medicamento" onPress={handleUpdateMedication}/>
           <Button title="Remover medicamento" onPress={handleRemoveMedication}/>
-          
+          <Button title="Voltar" onPress={handleBack} />
         </View>
       </View>
   );

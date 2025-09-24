@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button } from "react-native";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalStyles } from '../src/styles/GlobalStyles';
@@ -13,6 +13,10 @@ type Medication = {
 
 export default function ChooseMedicineToUpdate() {
   const [medications, setMedications] = useState<Medication[]>([]);
+
+  const handleBack = () => {
+          router.push('/manageMedicines');
+    }
 
   const fetchMedications = async () => {
     const token = await AsyncStorage.getItem("auth_token");
@@ -57,6 +61,7 @@ export default function ChooseMedicineToUpdate() {
         )}
         ListEmptyComponent={<Text>Nenhum medicamento cadastrado.</Text>}
       />
+      <Button title="Voltar" onPress={handleBack} />
     </View>
   );
 }

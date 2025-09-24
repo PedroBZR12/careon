@@ -14,8 +14,8 @@ export default function CalendarTestScreen() {
     console.log(`Botão ${buttonName} pressionado`);
   };
 
-  const handlePress3 = (buttonName: string) => {
-    console.log(`Botão ${buttonName} pressionado`);
+  const handlePress3 = () => {
+    router.push('/MedicationCheckList');
   };
 
   const handlePress4 = (buttonName: string) => {
@@ -44,7 +44,7 @@ export default function CalendarTestScreen() {
       <View style={styles.buttonContainer}>
         <Button title="Gerenciar remédios" onPress={() => handlePress1()} />
         <Button title="Gerenciar compromisso de saúde" onPress={() => handlePress2('2')} />
-        <Button title="Monitoramento da rotina" onPress={() => handlePress3('3')} />
+        <Button title="Monitoramento da rotina" onPress={() => handlePress3()} />
         <Button title="Pesquisar remédios" onPress={() => handlePress4('4')} />
       </View>
     </View>
