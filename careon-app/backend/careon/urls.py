@@ -14,4 +14,5 @@ urlpatterns = [
     path('users/', include('apps.users.urls')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('', redirect_to_appointments, name='home'),
+    path("medications/", include("apps.medications.urls"))
 ]

@@ -18,9 +18,13 @@ export default function CalendarTestScreen() {
     router.push('/MedicationCheckList');
   };
 
-  const handlePress4 = (buttonName: string) => {
-    console.log(`Botão ${buttonName} pressionado`);
+  const handlePress4 = () => {
+    router.push('/searchScreen');
   };
+
+  const handleSettingsPerfil = () => {
+    router.push('/profileSettings');
+  }
 
 
   return (
@@ -28,7 +32,8 @@ export default function CalendarTestScreen() {
       <View style={GlobalStyles.header}>
         <Image source={require('../src/assets/images/icon.png')} style={GlobalStyles.profilePic} />
 
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleSettingsPerfil}>
             <Ionicons name="settings-outline" size={28} color="blue"/>    
         </TouchableOpacity>
       </View>
@@ -45,7 +50,7 @@ export default function CalendarTestScreen() {
         <Button title="Gerenciar remédios" onPress={() => handlePress1()} />
         <Button title="Gerenciar compromisso de saúde" onPress={() => handlePress2('2')} />
         <Button title="Monitoramento da rotina" onPress={() => handlePress3()} />
-        <Button title="Pesquisar remédios" onPress={() => handlePress4('4')} />
+        <Button title="Pesquisar remédios" onPress={() => handlePress4()} />
       </View>
     </View>
   );

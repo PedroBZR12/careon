@@ -47,6 +47,7 @@ export default function RootLayout() {
           
           <Stack.Screen name="updateMedication" options={{headerShown: false}}/>
           <Stack.Screen name="MedicationCheckList" options={{headerShown: false}}/>
+          <Stack.Screen name="searchScreen" options={{headerShown: false}}/>
 
         </Stack>
         <StatusBar style="auto" />

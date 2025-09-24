@@ -6,6 +6,7 @@ from .models import Remedio, Intake
 from .serializers import RemedioSerializer, IntakeSerializer
 from datetime import date
 from django.utils import timezone
+from .services import buscar_preco
 
 
 class RemedioCreateView(APIView):
@@ -119,3 +120,14 @@ class MarkMedicationView(APIView):
 
         serializer = IntakeSerializer(intake)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class BuscarPrecoView(APIView):
+    permission_classes = [permissions.AllowAny]  # qualquer um pode buscar
+
+    def get(self, request):
+        termo = request.query_params.get("q")
+        if not termo:
+            return Response({"error": "Parâmetro 'q' é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
+
+        resultados = buscar_preco(termo)
+        return Response(resultados, status=status.HTTP_200_OK)
