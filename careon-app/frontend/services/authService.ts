@@ -1,21 +1,21 @@
-import api from './api'; // Importa seu api.ts
+import api from './api'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const authService = {
-    // Login usando rotas existentes
+    
     async login(email: string, password: string) {
         try {
-            // Faz POST para rota /login/
+            
             const response = await api.post('/users/login/', {
                 email,
                 password
             });
             console.log("Resposta do login:", response.data); 
             
-            // API Django retorna: {"token": "abc123..."}
+            
             const token = response.data.token;
             
-            // Salva o token no celular
+           
             await AsyncStorage.removeItem('auth_token');
             await AsyncStorage.setItem('auth_token', token);
             
@@ -23,14 +23,14 @@ export const authService = {
         } catch (error: any) {
             console.log('Erro no login:', error);
             
-            // API retorna: {"error": "Credenciais inválidas"}
+            
             const errorMessage = error.response?.data?.error || 'Erro no login';
             
             return { success: false, error: errorMessage };
         }
     },
 
-    // Registro usando rotas existentes
+    
     async register(userData: {
         username: string;
         password: string;
@@ -39,13 +39,13 @@ export const authService = {
         email?: string;
     }) {
         try {
-            // Faz POST para rota /register/
+            
             const response = await api.post('/users/register/', userData);
             
-            // API retorna: {"token": "abc123..."}
+            
             const token = response.data.token;
             
-            // Salva o token (usuário já fica logado após registro)
+            
             await AsyncStorage.removeItem('auth_token');
             await AsyncStorage.setItem('auth_token', token);
             
@@ -53,17 +53,17 @@ export const authService = {
         } catch (error: any) {
             console.log('Erro no registro:', error);
             
-            // API retorna os erros do serializer
+            
             const errors = error.response?.data || {};
             
             return { success: false, errors };
         }
     },
 
-    // Logout
+   
     async logout() {
         try {
-            // Remove o token do celular
+            
             await AsyncStorage.removeItem('auth_token');
             return { success: true };
         } catch (error) {
@@ -72,11 +72,11 @@ export const authService = {
         }
     },
 
-    // Verifica se usuário está logado
+   
     async isAuthenticated() {
         try {
             const token = await AsyncStorage.getItem('auth_token');
-            return !!token; // retorna true se tem token
+            return !!token; 
         } catch (error) {
             return false;
         }

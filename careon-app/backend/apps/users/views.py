@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .serializers import UserRegisterSerializer
+from rest_framework import status, generics, permissions
+from .serializers import UserRegisterSerializer, UserUpdateSerializer, User
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 
@@ -59,4 +59,19 @@ class LoginView(APIView):
             }
         }, status=status.HTTP_200_OK)
         
-        
+class UserUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user  # só edita a si mesmo
+
+
+
+
+class UserMeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserUpdateSerializer(request.user)
+        return Response(serializer.data)

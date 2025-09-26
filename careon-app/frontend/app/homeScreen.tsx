@@ -1,12 +1,48 @@
 import { GlobalStyles } from '../src/styles/GlobalStyles';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Button, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CalendarTestScreen() {
-  // Funções para cada botão — por enquanto só mostram no console
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  
+  useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const token = await AsyncStorage.getItem("auth_token");
+      if (!token) {
+        console.error("Nenhum token encontrado, usuário não autenticado");
+        return;
+      }
+
+      const response = await fetch("http://192.168.0.196:8000/users/me/", {
+        headers: {
+          "Authorization": `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Status:", response.status);
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error("Erro no backend:", response.status, text);
+        return;
+      }
+
+      const data = await response.json();
+      console.log("JSON parseado:", data);
+      setAvatarUrl(data.avatar_url);
+    } catch (err) {
+      console.error("Erro ao buscar usuário:", err);
+    }
+  };
+
+  fetchUser();
+}, []);
+
   const handlePress1 = () => {
     router.push('/manageMedicines')
   };
@@ -30,7 +66,9 @@ export default function CalendarTestScreen() {
   return (
     <View style={styles.container}>
       <View style={GlobalStyles.header}>
-        <Image source={require('../src/assets/images/icon.png')} style={GlobalStyles.profilePic} />
+        <Image source={
+          avatarUrl ? { uri: avatarUrl} : require('../src/assets/images/icon.png')
+        } style={GlobalStyles.profilePic} />
 
         <TouchableOpacity
           onPress={handleSettingsPerfil}>
