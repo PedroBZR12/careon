@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, Platform, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Colors } from "@/src/styles/GlobalStyles";
+import { Colors, GlobalStyles } from "@/src/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from "expo-image-picker"
 import { uploadAvatar } from "../services/supabase"
+import { router } from "expo-router";
 
 export default function EditarPerfilScreen() {
   
@@ -19,7 +20,15 @@ export default function EditarPerfilScreen() {
   const [date, setDate] = React.useState(new Date());
   const [show, setShow] = React.useState(false);
   const [avatar, setAvatar] = useState<string | null>(null);
-
+  const formatarData = (dataISO: string) => {
+  if (!dataISO) return "";
+  const [ano, mes, dia] = dataISO.split("-");
+  return `${dia}/${mes}/${ano}`;
+};
+  const handleBack = () => {
+      router.push("/homeScreen");
+    };
+    
   const onChange = (event: any, selectedDate?: Date) => {
       if(Platform.OS === 'android')
         setShow(false);
@@ -51,7 +60,7 @@ export default function EditarPerfilScreen() {
         setBirthday(data.birthday || "");
         setPhone(data.phone || "");
         setGender(data.gender || "");
-        setAvatar(data.avatar || null);
+        setAvatar(data.avatar_url || null);
       } catch (err) {
         Alert.alert("Erro", "Não foi possível carregar os dados do perfil");
       } finally {
@@ -119,80 +128,109 @@ export default function EditarPerfilScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Editar Perfil</Text>
+    <View style={GlobalStyles.container}>
+      <View style={styles.container}>
+        <Text style={GlobalStyles.title}>Editar Perfil</Text>
 
-      {avatar && (
-        <Image
-          source={{ uri: avatar }}
-          style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 10 }}
-        />
-      )}
-      <Button title="Trocar foto" onPress={pickImage} />
+        {avatar && (
+          <Image
+            source={{ uri: avatar }}
+            style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 10 }}
+          />
+        )}
+        <View style={{ width: '100%', padding: 10,
+         borderRadius: 8, marginTop: 10}}>
+          <Button title="Trocar foto" onPress={pickImage} />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Usuário"
-        value={username}
-        onChangeText={setUsername}
-      />
+        </View>
+        
+        <View style={{width:'100%', padding: 10,
+         borderRadius: 8 }}>
+          <TextInput
+            style={GlobalStyles.input}
+            placeholder="Usuário"
+            value={username}
+            onChangeText={setUsername}
+          />
 
-      <View style={{ width: '80%', padding: 10,
-       borderRadius: 8, marginTop: 10, alignItems: 'center' }}>
-        <Button onPress={() => setShow(true)} title={birthday ? birthday : "Selecionar data de nascimento"} />
+        </View>
+
+        <View style={{ width: '100%', padding: 10,
+        borderRadius: 8, marginTop: -10}}>
+          <Button onPress={() => setShow(true)} title={birthday ? formatarData(birthday) : "Selecionar data de nascimento"} />
+        </View>
+        {show && (
+          <DateTimePicker style={{ width: '100%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
+            value={date}
+            mode="date"
+            display="spinner"
+            onChange={onChange}
+            maximumDate={new Date()}
+          />
+        )}
+        <View style={{ width: '100%', padding: 10,
+        borderRadius: 8, marginTop: -10}}>
+
+          <TextInput
+            style={GlobalStyles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+        <View style={{ width: '100%', padding: 10,
+        borderRadius: 8, marginTop: -10}}>
+          <TextInput
+            style={GlobalStyles.input}
+            placeholder="Nova senha"
+            value={password}
+            onChangeText={setPassword}
+          />
+
+        </View>
+        <View style={{ width: '100%', padding: 10,
+        borderRadius: 8, marginTop: -10}}>
+          <TextInput
+            style={GlobalStyles.input}
+            placeholder="Telefone"
+            value={phone}
+            onChangeText={setPhone}
+          />
+
+        </View>
+        <View style={{ width: '100%', padding: 10,
+        borderRadius: 8, marginTop: -10}}>
+
+        <View style={{width: '100%', 
+                      borderColor: Colors.muted, 
+                      borderWidth: 1, 
+                      borderRadius: 8, 
+                      padding: 5,
+                      height: 80
+
+        }}>
+          <Text>Selecione seu gênero:</Text>
+          <Picker
+            selectedValue={gender}
+            onValueChange={(itemValue) => setGender(itemValue)}
+            style={{height: 60, width: '100%', padding: 10}}
+            mode="dropdown"
+          >
+            <Picker.Item label="Selecione" value="" />
+            <Picker.Item label="Masculino" value="male" />
+            <Picker.Item label="Feminino" value="female" />
+            <Picker.Item label="Outro" value="other" />
+          </Picker>
+        </View>
       </View>
-      {show && (
-        <DateTimePicker style={{ width: '80%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
-          value={date}
-          mode="date"
-          display="spinner"
-          onChange={onChange}
-          maximumDate={new Date()}
-        />
-      )}
+        </View>
+        
+          <View style={{marginBottom: 10, gap: 15, marginTop: 30, width: '84%', alignSelf: 'center'}}>
+          <Button title="Salvar" onPress={salvar} />
+            <Button title="Voltar" onPress={handleBack}/>
+          
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Nova senha"
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Telefone"
-        value={phone}
-        onChangeText={setPhone}
-      />
-      <View style={{width: '100%', 
-                    marginTop: 10, 
-                    borderColor: Colors.muted, 
-                    borderWidth: 1, 
-                    borderRadius: 8, 
-                    padding: 5,
-                    height: 80
-
-      }}>
-        <Text>Selecione seu gênero:</Text>
-        <Picker
-          selectedValue={gender}
-          onValueChange={(itemValue) => setGender(itemValue)}
-          style={{height: 60, width: '100%', padding: 10}}
-          mode="dropdown"
-        >
-          <Picker.Item label="Selecione" value="" />
-          <Picker.Item label="Masculino" value="male" />
-          <Picker.Item label="Feminino" value="female" />
-          <Picker.Item label="Outro" value="other" />
-        </Picker>
-      </View>
-      
-      <Button title="Salvar" onPress={salvar} />
+        </View>
     </View>
   );
 }
@@ -208,3 +246,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
+
+

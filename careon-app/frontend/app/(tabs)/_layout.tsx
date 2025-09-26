@@ -19,7 +19,12 @@ export default function RootLayout() {
           <Stack.Screen name="removeMedication" options={{headerShown: false}}/> 
           <Stack.Screen name="updateMedication" options={{headerShown: false}}/>
           <Stack.Screen name="chooseMedicineToUpdate" options={{headerShown: false}}/>
-          
+          <Stack.Screen name="searchScreen" options={{headerShown: false}}/>
+          <Stack.Screen name="Appointments" options={{headerShown: false}}/>
+          <Stack.Screen name="UpdateAppointments" options={{headerShown: false}}/>
+          <Stack.Screen name="EditProfile" options={{headerShown: false}}/>
+          <Stack.Screen name="RemoveAppointments" options={{headerShown: false}}/>
+          <Stack.Screen name="profileSettings" options={{headerShown: false}}/>
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

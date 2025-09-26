@@ -16,6 +16,15 @@ export default function UpdateMedicationScreen() {
   const handleBack = () => {
       router.push('/manageMedicines');
     }
+   const mapDays: Record<string, string> = {
+  monday: "Segunda",
+  tuesday: "Terça",
+  wednesday: "Quarta",
+  thursday: "Quinta",
+  friday: "Sexta",
+  saturday: "Sábado",
+  sunday: "Domingo",
+};
   const handleUpdate = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
@@ -40,11 +49,13 @@ export default function UpdateMedicationScreen() {
   };
 
   return (
-    <View style={GlobalStyles.container}>
-      <Text style={GlobalStyles.title}>Atualizar Medicamento</Text>
+    <View style={[GlobalStyles.container, GlobalStyles.center]}>
+      <View style={{marginTop: 20}}>
+        <Text style={GlobalStyles.title}>Atualizar Medicamento</Text>
+      </View>
 
       <TextInput
-        style={styles.input}
+        style={GlobalStyles.input}
         value={name}
         onChangeText={setName}
         placeholder="Nome do medicamento"
@@ -64,13 +75,14 @@ export default function UpdateMedicationScreen() {
         onChangeText={setFrequency}
       />
 
-     <View style={{width: '80%', 
+     <View style={{width: '100%', 
         marginTop: 10, 
-        borderColor: "#000", 
+        borderColor: "#666666", 
         borderWidth: 1, 
         borderRadius: 8, 
         padding: 5,
-        height: 80
+        height: 80,
+        marginBottom:25
       
       }}>
         <Text>Selecione os dias:</Text>
@@ -92,14 +104,15 @@ export default function UpdateMedicationScreen() {
       </View>
 
       <TextInput
-        style={styles.input}
+        style={GlobalStyles.input}
         value={time}
         onChangeText={setTime}
         placeholder="Horário (ex: 08:30)"
       />
-
-      <Button title="Salvar alterações" onPress={handleUpdate} />
-      <Button title="Voltar" onPress={handleBack} />
+      <View style={{width: '100%', gap: 15}}>
+        <Button title="Salvar alterações" onPress={handleUpdate} />
+        <Button title="Voltar" onPress={handleBack} />
+      </View>
     </View>
   );
 }

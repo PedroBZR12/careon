@@ -10,13 +10,22 @@ type Medication = {
   day: string;
   time: string;
 };
-
+  const mapDays: Record<string, string> = {
+  monday: "Segunda",
+  tuesday: "Terça",
+  wednesday: "Quarta",
+  thursday: "Quinta",
+  friday: "Sexta",
+  saturday: "Sábado",
+  sunday: "Domingo",
+};
 export default function RemoveMedicinesScreen() {
   const [medications, setMedications] = useState<Medication[]>([]);
   const [loading, setLoading] = useState(true);
   const handleBack = () => {
       router.push('/manageMedicines');
   }
+  
   const fetchMedications = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
@@ -63,7 +72,9 @@ export default function RemoveMedicinesScreen() {
 
   return (
     <View style={GlobalStyles.container}>
-      <Text style={GlobalStyles.title}>Remover Medicamentos</Text>
+      <View style={{marginTop:20}}>
+       <Text style={GlobalStyles.title}>Remover Medicamentos</Text>
+      </View>
 
       <FlatList
         data={medications}
@@ -71,7 +82,7 @@ export default function RemoveMedicinesScreen() {
         renderItem={({ item }) => (
           <View style={GlobalStyles.medItem}>
             <Text>{item.name}</Text>
-            <Text style={styles.hour}>Dia: {item.day} | Hora: {item.time}</Text>
+            <Text style={styles.hour}>Dia: {mapDays[item.day]} | Hora: {item.time}</Text>
             <Button
               title="Remover"
               color="#FF3B30"
@@ -90,7 +101,10 @@ export default function RemoveMedicinesScreen() {
         )}
         ListEmptyComponent={<Text>Nenhum medicamento cadastrado.</Text>}
       />
-      <Button title="Voltar" onPress={handleBack} />
+      <View style={{marginBottom: 30}}>
+        <Button title="Voltar" onPress={handleBack} />
+      </View>
+        
     </View>
   );
 }

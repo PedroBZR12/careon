@@ -10,7 +10,7 @@ export const authService = {
                 email,
                 password
             });
-            console.log("Resposta do login:", response.data); 
+            
             
             
             const token = response.data.token;
@@ -21,7 +21,7 @@ export const authService = {
             
             return { success: true, token: response.data.token, user: response.data.user };
         } catch (error: any) {
-            console.log('Erro no login:', error);
+            
             
             
             const errorMessage = error.response?.data?.error || 'Erro no login';
@@ -51,7 +51,7 @@ export const authService = {
             
             return { success: true, token };
         } catch (error: any) {
-            console.log('Erro no registro:', error);
+            
             
             
             const errors = error.response?.data || {};
@@ -67,7 +67,7 @@ export const authService = {
             await AsyncStorage.removeItem('auth_token');
             return { success: true };
         } catch (error) {
-            console.log('Erro no logout:', error);
+            
             return { success: false };
         }
     },

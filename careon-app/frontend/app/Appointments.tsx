@@ -5,27 +5,31 @@ import { GlobalStyles } from "@/src/styles/GlobalStyles";
 import { useAuth } from "@/src/hooks/useAuth";
 
 type Appointment = {
-  id: number | string;
-  title: string;
-  day: string;   // ex: "monday", "tuesday"
-  time: string;  // ex: "14:00"
+    id: number | string;
+    tipo_compromisso: string;
+    data: string;   
+    horario: string;
+    descricao: string;
 };
 
-const daysOfWeek = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
 export default function Appointments() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDay, setSelectedDay] = useState<string>("Segunda");
   const { token, isLoading } = useAuth();
-
+  const formatarData = (dataISO: string) => {
+  if (!dataISO) return "";
+  const [ano, mes, dia] = dataISO.split("-");
+  return `${dia}/${mes}/${ano}`;
+};
   const fetchAppointments = async () => {
     if (!token) {
       router.push("/"); // volta para login
       return;
     }
     try {
-      const response = await fetch("http://192.168.0.196:8000/appointments/", {
+      const response = await fetch("http://192.168.0.196:8000/appointments/compromissos", {
         headers: {
           Authorization: `Token ${token}`,
           "Content-Type": "application/json",
@@ -60,80 +64,53 @@ export default function Appointments() {
   }, [isLoading, token]);
 
   const handleAddAppointment = () => {
-    router.push("/");
+    router.push("/AddAppointments");
   };
 
   const handleUpdateAppointment = () => {
-    router.push("/");
+    router.push("/UpdateAppointments");
   };
 
   const handleRemoveAppointment = () => {
-    router.push("/");
+    router.push("/RemoveAppointments");
   };
 
   const handleBack = () => {
     router.push("/homeScreen");
   };
 
-  const mapDays: Record<string, string> = {
-    monday: "Segunda",
-    tuesday: "Terça",
-    wednesday: "Quarta",
-    thursday: "Quinta",
-    friday: "Sexta",
-    saturday: "Sábado",
-    sunday: "Domingo",
-  };
+ 
 
-  const filteredAppointments = appointments.filter(
-    (appt) => mapDays[appt.day.toLowerCase()] === selectedDay
-  );
+  
 
   return (
     <View style={GlobalStyles.container}>
-      <Text style={GlobalStyles.title}>Meus Compromissos</Text>
+        <View style={{marginTop:30}}>
+            <Text style={GlobalStyles.title}>Meus Compromissos</Text>
+        </View>
+            
 
-      {/* Botões dos dias da semana */}
-      <View style={GlobalStyles.daysContainer}>
-        {daysOfWeek.map((day) => (
-          <TouchableOpacity
-            key={day}
-            style={[
-              GlobalStyles.dayButton,
-              selectedDay === day && GlobalStyles.dayButtonSelected,
-            ]}
-            onPress={() => setSelectedDay(day)}
-          >
-            <Text
-              style={
-                selectedDay === day
-                  ? GlobalStyles.dayTextSelected
-                  : GlobalStyles.dayText
-              }
-            >
-              {day}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+     
+     
 
-      {/* Lista de compromissos */}
+      
       <FlatList
-        data={filteredAppointments}
+        data={appointments}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={GlobalStyles.medItem}>
-            <Text>{item.title} - {item.time}</Text>
+            <Text>{item.tipo_compromisso} - {formatarData(item.data)}</Text>
           </View>
         )}
         ListEmptyComponent={<Text>Nenhum compromisso cadastrado.</Text>}
       />
 
-      {/* Botões de ação */}
-      <Button title="Adicionar compromisso" onPress={handleAddAppointment} />
-      <Button title="Atualizar compromisso" onPress={handleUpdateAppointment} />
-      <Button title="Remover compromisso" onPress={handleRemoveAppointment} />
-      <Button title="Voltar" onPress={handleBack} />
+      <View style={{marginBottom: 30, gap: 15}}>
+        <Button title="Adicionar compromisso" onPress={handleAddAppointment} />
+        <Button title="Atualizar compromisso" onPress={handleUpdateAppointment} />
+        <Button title="Remover compromisso" onPress={handleRemoveAppointment} />
+        <Button title="Voltar" onPress={handleBack} />
+      </View>
     </View>
   );
 }

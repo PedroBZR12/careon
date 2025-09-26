@@ -1,7 +1,10 @@
 from rest_framework import serializers
-from .models import Compromissos
+from .models import Compromisso
 
-class CompromissosSerializer(serializers.ModelSerializer):
+class CompromissoSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Compromissos
-        fields = '__all__'
+        model = Compromisso
+        fields = ["id", "tipo_compromisso", "data", "horario"]
+        
+       

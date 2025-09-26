@@ -18,6 +18,15 @@ export default function ChecklistScreen() {
   const [medications, setMedications] = useState<Medication[]>([]);
   const [checked, setChecked] = useState<{ [key: string]: boolean }>({});
 
+  const mapDays: Record<string, string> = {
+  monday: "Segunda",
+  tuesday: "Terça",
+  wednesday: "Quarta",
+  thursday: "Quinta",
+  friday: "Sexta",
+  saturday: "Sábado",
+  sunday: "Domingo",
+};
   const handleBack = () => {
     router.push('/homeScreen');
   }
@@ -69,7 +78,9 @@ export default function ChecklistScreen() {
 
   return (
     <View style={GlobalStyles.container}>
-      <Text style={GlobalStyles.title}>Checklist de Medicamentos</Text>
+      <View style={{marginTop: 20}}>
+        <Text style={GlobalStyles.title}>Checklist de Medicamentos</Text>
+      </View>
 
       <FlatList
         data={medications}
@@ -87,14 +98,17 @@ export default function ChecklistScreen() {
             <View style={{ marginLeft: 10 }}>
               <Text style={styles.name}>{item.name} - {item.dosage}</Text>
               <Text style={styles.details}>
-                {item.day} às {item.time}
+                {mapDays[item.day]} às {item.time}
               </Text>
             </View>
           </TouchableOpacity>
         )}
         ListEmptyComponent={<Text>Nenhum medicamento cadastrado.</Text>}
       />
-      <Button title="Voltar" onPress={handleBack} />
+
+      <View style={{marginBottom:30}}>
+        <Button title="Voltar" onPress={handleBack} />
+      </View>
     </View>
   );
 }

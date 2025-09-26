@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const Colors = {
   primary: '#4F46E5',
   secondary: '#6366F1',
-  background: '#F5F5F5',
+  background: '#ffffffff',
   text: '#333333',
   muted: '#666666',
 };
@@ -19,6 +19,7 @@ export const GlobalStyles = StyleSheet.create({
     padding: 20,
     justifyContent: 'space-between',
     backgroundColor: Colors.background,
+    
   },
   containerItems: {
     flex: 1,
@@ -43,6 +44,7 @@ export const GlobalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    marginTop: 20,
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.text,
@@ -52,7 +54,7 @@ export const GlobalStyles = StyleSheet.create({
     color: Colors.text,
   },
   button: {
-    width: '80%',
+    width: '100%',
     padding: 15,
     backgroundColor: Colors.primary,
     borderRadius: 8,
@@ -60,7 +62,7 @@ export const GlobalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    width: '80%',
+    width: '100%',
     color: '#fff',
     fontWeight: 'bold',
   },
@@ -73,7 +75,7 @@ export const GlobalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    width: '80%',
+    width: '100%',
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 6,
@@ -82,7 +84,7 @@ export const GlobalStyles = StyleSheet.create({
   },
    medItem: {
     padding: 10,
-    width: '80%',
+    width: '100%',
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
@@ -93,7 +95,7 @@ export const GlobalStyles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   dayButton: {
-    width: '80%',
+    width: '100%',
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 20,

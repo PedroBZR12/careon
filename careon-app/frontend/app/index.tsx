@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, Alert, Image } from "react-native";  
+import { View, Text, TextInput, Alert, Image, Button } from "react-native";  
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
 import {  useRouter } from "expo-router";
@@ -103,34 +103,11 @@ export default function LoginScreen() {
         </TouchableOpacity>
       </View>
       
+        <View style={{gap: 15, width: '82%', marginTop: 30, borderRadius:10}}>
 
-      <TouchableOpacity
-        onPress={handleLogin}
-        style={{
-          width: '80%',
-          padding: 15,
-          backgroundColor: Colors.primary,
-          borderRadius: 8,
-          marginTop: 20,
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Entrar</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={handleRegister}
-        style={{
-          width: '80%',
-          padding: 15,
-          backgroundColor: Colors.secondary,
-          borderRadius: 8,
-          marginTop: 10,
-          alignItems: 'center',
-        }}
-      >
-        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Registrar</Text>
-      </TouchableOpacity>
+      <Button title="Entrar" onPress={handleLogin}/>
+      <Button title="Registrar" onPress={handleRegister}/>
+        </View>
     </View>
   );
 }

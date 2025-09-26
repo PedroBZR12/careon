@@ -46,8 +46,8 @@ export default function CalendarTestScreen() {
   const handlePress1 = () => {
     router.push('/manageMedicines')
   };
-  const handlePress2 = (buttonName: string) => {
-    console.log(`Botão ${buttonName} pressionado`);
+  const handlePress2 = () => {
+    router.push('/Appointments');
   };
 
   const handlePress3 = () => {
@@ -65,15 +65,18 @@ export default function CalendarTestScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={GlobalStyles.header}>
-        <Image source={
-          avatarUrl ? { uri: avatarUrl} : require('../src/assets/images/icon.png')
-        } style={GlobalStyles.profilePic} />
+      <View style={{marginTop: 20}}>
+        <View style={GlobalStyles.header}>
+          <Image source={
+            avatarUrl ? { uri: avatarUrl} : require('../src/assets/images/icon.png')
+          } style={GlobalStyles.profilePic} />
 
-        <TouchableOpacity
-          onPress={handleSettingsPerfil}>
-            <Ionicons name="settings-outline" size={28} color="blue"/>    
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleSettingsPerfil}>
+              <Ionicons name="settings-outline" size={28} color="blue"/>    
+          </TouchableOpacity>
+        </View>
+
       </View>
       {/* Calendário */}
       <Calendar
@@ -86,7 +89,7 @@ export default function CalendarTestScreen() {
       {/* Botões */}
       <View style={styles.buttonContainer}>
         <Button title="Gerenciar remédios" onPress={() => handlePress1()} />
-        <Button title="Gerenciar compromisso de saúde" onPress={() => handlePress2('2')} />
+        <Button title="Gerenciar compromisso de saúde" onPress={() => handlePress2()} />
         <Button title="Monitoramento da rotina" onPress={() => handlePress3()} />
         <Button title="Pesquisar remédios" onPress={() => handlePress4()} />
       </View>

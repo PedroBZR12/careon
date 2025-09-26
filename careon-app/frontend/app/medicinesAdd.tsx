@@ -24,24 +24,22 @@ export default function AddMedicationScreen() {
 
   const handleSave = async () => {
     const medication = { name, dosage, time, day, frequency, notes };
-    console.log('Medicamento salvo:', medication);
-    console.log('Token usado:', token);
     try{
       const response = await api.post('medications/create/', medication, {
         headers: {
           Authorization: `Token ${token}`,
         }
     });
-      console.log('Token usado:', token);
+      
       console.log(response.data);
       Alert.alert('Sucesso', 'Medicamento salvo');
       router.push('/manageMedicines')
     } catch (error){
           if (error instanceof Error) {
-          console.error('Erro:', error.message);
+  
           Alert.alert('Erro', error.message);
         } else {
-          console.error('Erro desconhecido:', error);
+      
           Alert.alert('Erro', 'Ocorreu um erro inesperado.');
         }
       } 
@@ -50,7 +48,9 @@ export default function AddMedicationScreen() {
 
     return (
     <ScrollView contentContainerStyle={[GlobalStyles.container, GlobalStyles.center]}>
-      <Text style={GlobalStyles.title}>Adicionar Medicamento</Text>
+      <View style={{marginBottom:40}}>
+       <Text style={GlobalStyles.title}>Adicionar Medicamento</Text>
+      </View>
 
       <TextInput
         style={GlobalStyles.input}
@@ -68,16 +68,17 @@ export default function AddMedicationScreen() {
 
       
       
-            <View style={{width: '80%', 
+            <View style={{width: '100%', 
               marginTop: 10, 
-              borderColor: Colors.muted, 
+              borderColor: "#666666", 
               borderWidth: 1, 
               borderRadius: 8, 
               padding: 5,
-              height: 80
+              height: 80,
+              marginBottom:10,
       
             }}>
-              <Text>Selecione os dias:</Text>
+              <Text>Selecione o dia:</Text>
               <Picker
                 selectedValue={day}
                 onValueChange={(itemValue) => setDay(itemValue)}
@@ -116,9 +117,11 @@ export default function AddMedicationScreen() {
         onChangeText={setNotes}
         multiline
       />
-
-      <Button title="Adicionar" onPress={handleSave} />
-      <Button title="Voltar" onPress={handleBack} />
+      <View style={{width:'100%', gap: 15}}>
+        <Button title="Adicionar" onPress={handleSave} />
+        <Button title="Voltar" onPress={handleBack} />
+        
+      </View>
     </ScrollView>
   );
 }

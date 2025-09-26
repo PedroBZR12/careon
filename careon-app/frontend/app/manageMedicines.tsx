@@ -95,7 +95,9 @@ export default function MedicationHomeScreen() {
 
   return (
      <View style={GlobalStyles.container}>
+      <View style={{marginTop:20}}>
         <Text style={GlobalStyles.title}>Meus Medicamentos</Text>
+      </View>
 
         {/* Botões dos dias da semana */}
         <View style={GlobalStyles.daysContainer}>
@@ -128,11 +130,12 @@ export default function MedicationHomeScreen() {
             )}
             ListEmptyComponent={<Text>Nenhum medicamento cadastrado.</Text>}
           />
-
-          <Button title="Adicionar medicamento" onPress={handleAddMedication} />
-          <Button title="Atualizar medicamento" onPress={handleUpdateMedication}/>
-          <Button title="Remover medicamento" onPress={handleRemoveMedication}/>
-          <Button title="Voltar" onPress={handleBack} />
+          <View style={{marginBottom: 30, gap: 15}}>
+            <Button title="Adicionar medicamento" onPress={handleAddMedication} />
+            <Button title="Atualizar medicamento" onPress={handleUpdateMedication}/>
+            <Button title="Remover medicamento" onPress={handleRemoveMedication}/>
+            <Button title="Voltar" onPress={handleBack} />
+          </View>
         </View>
       </View>
   );

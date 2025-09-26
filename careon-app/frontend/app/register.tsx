@@ -23,7 +23,14 @@ export default function RegisterScreen() {
   const [phone, setPhone] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const { register, isLoading } = useAuth();
-
+  const formatarData = (data: Date | string) => {
+  if (!data) return "";
+  const d = new Date(data);
+  const dia = String(d.getDate()).padStart(2, "0");
+  const mes = String(d.getMonth() + 1).padStart(2, "0");
+  const ano = d.getFullYear();
+  return `${dia}/${mes}/${ano}`;
+};
   const onChange = (event: any, selectedDate?: Date) => {
     if(Platform.OS === 'android')
       setShow(false);
@@ -38,6 +45,9 @@ export default function RegisterScreen() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const handleBack = () => {
+        router.push("/");
+      };
 
   const handleRegister = async () => {
     
@@ -186,8 +196,8 @@ export default function RegisterScreen() {
       </View>
 
       <View style={{ width: '80%', padding: 10,
-       borderRadius: 8, marginTop: 10, alignItems: 'center' }}>
-        <Button onPress={() => setShow(true)} title={birthday ? birthday : "Selecionar data de nascimento"} />
+       borderRadius: 8, marginTop: 10 }}>
+        <Button onPress={() => setShow(true)} title={birthday ? formatarData(birthday) : "Selecionar data de nascimento"} />
       </View>
       {show && (
         <DateTimePicker style={{ width: '80%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
@@ -212,21 +222,11 @@ export default function RegisterScreen() {
           marginTop: 20,
         }}
       />
-
-      <TouchableOpacity
-        onPress={handleRegister}
-        style={{
-          width: '80%',
-          padding: 15,
-          backgroundColor: Colors.secondary,
-          borderRadius: 8,
-          marginTop: 20,
-          alignItems: 'center',
-        }}
-      >
-
-        <Text style={{ color: '#fff', fontWeight: 'bold' }}>Registrar</Text>
-      </TouchableOpacity>
+      <View style={{marginTop: 20, width: '82%', gap: 15}}>
+        <Button title="Registrar" onPress={handleRegister}></Button>
+        <Button title="Logar" onPress={handleBack} />
+      </View>
+        
     </View>
   );
 }

@@ -17,6 +17,15 @@ export default function ChooseMedicineToUpdate() {
   const handleBack = () => {
           router.push('/manageMedicines');
     }
+  const mapDays: Record<string, string> = {
+  monday: "Segunda",
+  tuesday: "Terça",
+  wednesday: "Quarta",
+  thursday: "Quinta",
+  friday: "Sexta",
+  saturday: "Sábado",
+  sunday: "Domingo",
+};
 
   const fetchMedications = async () => {
     const token = await AsyncStorage.getItem("auth_token");
@@ -55,13 +64,15 @@ export default function ChooseMedicineToUpdate() {
           >
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.details}>
-              Dia: {item.day} | Hora: {item.time}
+              Dia: {mapDays[item.day]} | Hora: {item.time}
             </Text>
           </TouchableOpacity>
         )}
         ListEmptyComponent={<Text>Nenhum medicamento cadastrado.</Text>}
       />
-      <Button title="Voltar" onPress={handleBack} />
+      <View style={{marginBottom: 30}}>
+        <Button title="Voltar" onPress={handleBack} />
+      </View>
     </View>
   );
 }
