@@ -6,6 +6,7 @@ from .serializers import UserRegisterSerializer, UserUpdateSerializer, User
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from users.models import DeviceToken
 
 
 
@@ -75,3 +76,13 @@ class UserMeView(APIView):
     def get(self, request):
         serializer = UserUpdateSerializer(request.user)
         return Response(serializer.data)
+
+class DeviceTokenView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        token = request.data.get("token")
+        if not token:
+            return Response({"error": "Token não enviado"}, status=400)
+        DeviceToken.objects.update_or_create(user=request.user, defaults={"token": token})
+        return Response({"message": "Token salvo com sucesso!"})
