@@ -5,10 +5,28 @@ import { Calendar } from 'react-native-calendars';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
+
+export async function ensureNotificationPermission() {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+
+  if (existingStatus !== 'granted') {
+    const { status: newStatus } = await Notifications.requestPermissionsAsync();
+    if (newStatus !== 'granted') {
+      console.log("Permissão de notificação negada");
+      return false;
+    }
+  }
+
+  return true;
+}
 
 export default function CalendarTestScreen() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   
+
+
+
   useEffect(() => {
   const fetchUser = async () => {
     try {
@@ -35,6 +53,25 @@ export default function CalendarTestScreen() {
       const data = await response.json();
       console.log("JSON parseado:", data);
       setAvatarUrl(data.avatar_url);
+
+       const granted = await ensureNotificationPermission();
+      if (!granted) return;
+
+      const tokenData = await Notifications.getExpoPushTokenAsync();
+      const fcmToken = tokenData.data;
+
+      await fetch("http://192.168.0.196:8000/api/device-token/", {
+        method: "POST",
+        headers: {
+          "Authorization": `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: fcmToken }),
+      });
+
+      console.log("Token FCM enviado com sucesso");
+
+
     } catch (err) {
       console.error("Erro ao buscar usuário:", err);
     }
