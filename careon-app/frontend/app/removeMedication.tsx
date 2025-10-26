@@ -3,6 +3,7 @@ import { View, Text, FlatList, Button, Alert, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
 import { GlobalStyles } from '@/src/styles/GlobalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from "@env";
 
 type Medication = {
   id: number | string;
@@ -29,7 +30,7 @@ export default function RemoveMedicinesScreen() {
   const fetchMedications = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      const response = await fetch("http://192.168.0.196:8000/medications/",{
+      const response = await fetch(`${API_URL}/medications/`, {
       headers: {
         "Authorization": `Token ${token}`,
         "Content-Type": "application/json",
@@ -47,7 +48,7 @@ export default function RemoveMedicinesScreen() {
   const deleteMedication = async (id: number | string) => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      const response = await fetch(`http://192.168.0.196:8000/medications/${id}/delete/`, {
+      const response = await fetch(`${API_URL}/medications/${id}/delete/`, {
         method: "DELETE",
         headers: {
           "Authorization": `Token ${token}`,

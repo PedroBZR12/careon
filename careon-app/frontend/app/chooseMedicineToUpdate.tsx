@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button } from "reac
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalStyles } from '../src/styles/GlobalStyles';
+import { API_URL } from "@env";
 
 type Medication = {
   id: number | string;
@@ -29,7 +30,7 @@ export default function ChooseMedicineToUpdate() {
 
   const fetchMedications = async () => {
     const token = await AsyncStorage.getItem("auth_token");
-    const response = await fetch("http://192.168.0.196:8000/medications/", {
+    const response = await fetch(`${API_URL}/medications/`, {
       headers: { Authorization: `Token ${token}` },
     });
     const data = await response.json();

@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, Platform } from "reac
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import { useAuth } from "@/src/hooks/useAuth";
+import { API_URL } from "@env";
 
 export default function AppointmentsAddScreen() {
   const { token } = useAuth();
@@ -21,7 +22,7 @@ export default function AppointmentsAddScreen() {
     }
 
     try {
-      const response = await fetch("http://192.168.0.196:8000/appointments/compromissos/", {
+      const response = await fetch(`${API_URL}/appointments/compromissos/`, {
         method: "POST",
         headers: {
           "Authorization": `Token ${token}`,

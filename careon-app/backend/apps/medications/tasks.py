@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 from django.utils import timezone
 from .models import Remedio
-from users.models import DeviceToken  # ou o caminho correto
+from apps.users.models import DeviceToken  # ou o caminho correto
 import requests
 import json
 

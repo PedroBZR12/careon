@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { TextInput, Text, View, Alert, Button, StyleSheet, ActivityIndicator, FlatList } from "react-native";
+import { API_URL } from "@env";
 
 type Resultado = {
   produto: string;
@@ -25,7 +26,7 @@ export default function searchMedicines() {
         setErro(null);
 
         try {
-        const response = await fetch(`http://192.168.0.196:8000/medications/buscar/?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`${API_URL}/medications/buscar/?q=${encodeURIComponent(query)}`);
         const data = await response.json();
 
         if (Array.isArray(data)) {

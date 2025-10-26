@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from "expo-image-picker"
 import { uploadAvatar } from "../services/supabase"
 import { router } from "expo-router";
+import { API_URL } from "@env";
 
 export default function EditarPerfilScreen() {
   
@@ -46,7 +47,7 @@ export default function EditarPerfilScreen() {
       setLoading(true);
       const token = await AsyncStorage.getItem("auth_token");
       try {
-        const res = await fetch("http://192.168.0.196:8000/users/update/", {
+        const res = await fetch(`${API_URL}/users/update/`, {
           method: "GET",
           headers: {
             "Authorization": `Token ${token}`,

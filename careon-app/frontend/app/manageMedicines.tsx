@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { GlobalStyles } from '@/src/styles/GlobalStyles';
 import { useAuth } from '@/src/hooks/useAuth';
+import { API_URL } from "@env";
 
 type Medication = {
   id: number | string;
@@ -27,14 +28,13 @@ export default function MedicationHomeScreen() {
 
   const fetchMedications = async () => {
 
-    console.log("Chamando fetchMedications com token:", token);
+
     if (!token) {
-      console.warn("Nenhum token encontrado, redirecionando para login...");
       router.push("/"); // ou sua tela de login
       return;
     } 
     try {
-      const response = await fetch("http://192.168.0.196:8000/medications/", {
+      const response = await fetch(`${API_URL}/medications/`, {
         headers: {
           "Authorization": `Token ${token}`,
           "Content-Type": "application/json"
@@ -43,7 +43,6 @@ export default function MedicationHomeScreen() {
       const data = await response.json();
       console.log("Resposta da API:", data);
       if (response.status === 401 || response.status === 403) {
-        console.error("Token inválido ou expirado");
         router.push("/"); // volta para login
         return;
       }

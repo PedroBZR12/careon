@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
+import { API_URL } from "@env";
 
 export async function ensureNotificationPermission() {
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -36,7 +37,7 @@ export default function CalendarTestScreen() {
         return;
       }
 
-      const response = await fetch("http://192.168.0.196:8000/users/me/", {
+      const response = await fetch(`${API_URL}/users/me/`, {
         headers: {
           "Authorization": `Token ${token}`,
           "Content-Type": "application/json",
@@ -60,7 +61,7 @@ export default function CalendarTestScreen() {
       const tokenData = await Notifications.getExpoPushTokenAsync();
       const fcmToken = tokenData.data;
 
-      await fetch("http://192.168.0.196:8000/api/device-token/", {
+      await fetch(`${API_URL}/api/device-token/`, {
         method: "POST",
         headers: {
           "Authorization": `Token ${token}`,

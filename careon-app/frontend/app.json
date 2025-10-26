@@ -9,7 +9,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "extra": {
-      "EXPO_ROUTER_APP_ROOT": "./app"
+      "router": {
+    "origin": false
+  },
+  "eas": {
+    "projectId": "ed825fd2-5e11-4ab9-b387-e61caed7045e"
+  }
     },
     "ios": {
       "supportsTablet": true
@@ -19,7 +24,8 @@
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.pedrobzr12.Careon"
     },
     "web": {
       "bundler": "metro",

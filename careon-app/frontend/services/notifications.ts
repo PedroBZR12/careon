@@ -23,7 +23,7 @@ export async function registerDeviceToken() {
       return;
     }
 
-    await axios.post("https://sua-api.com/api/device-token/", {
+    await axios.post("https:http://192.168.0.196:8000/api/device-token/", {
       token: fcmToken
     }, {
       headers: {

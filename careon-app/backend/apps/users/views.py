@@ -6,7 +6,7 @@ from .serializers import UserRegisterSerializer, UserUpdateSerializer, User
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from users.models import DeviceToken
+from apps.users.models import DeviceToken
 
 
 

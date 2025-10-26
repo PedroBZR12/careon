@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalStyles } from "@/src/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
 import { Colors } from "@/src/constants/Colors";
+import { API_URL } from "@env";
 
 export default function UpdateMedicationScreen() {
   const { id, name: initialName, day: initialDay, time: initialTime, dosage: initialDosage, frequency: initialFrequency } = useLocalSearchParams();
@@ -28,7 +29,7 @@ export default function UpdateMedicationScreen() {
   const handleUpdate = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      const response = await fetch(`http://192.168.0.196:8000/medications/${id}/update/`, {
+      const response = await fetch(`${API_URL}/medications/${id}/update/`, {
         method: "PUT",
         headers: {
           "Authorization": `Token ${token}`,

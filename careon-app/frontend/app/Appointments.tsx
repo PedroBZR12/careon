@@ -3,6 +3,7 @@ import { View, Text, Button, FlatList, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { GlobalStyles } from "@/src/styles/GlobalStyles";
 import { useAuth } from "@/src/hooks/useAuth";
+import { API_URL } from "@env";
 
 type Appointment = {
     id: number | string;
@@ -29,7 +30,7 @@ export default function Appointments() {
       return;
     }
     try {
-      const response = await fetch("http://192.168.0.196:8000/appointments/compromissos", {
+      const response = await fetch(`${API_URL}/appointments/compromissos`, {
         headers: {
           Authorization: `Token ${token}`,
           "Content-Type": "application/json",

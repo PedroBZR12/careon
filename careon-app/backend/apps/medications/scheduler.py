@@ -1,5 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from medications.tasks import check_medication_notifications
+from apps.medications.tasks import check_medication_notifications
 
 def start():
     scheduler = BackgroundScheduler()

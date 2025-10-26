@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Checkbox from "expo-checkbox";
 import { GlobalStyles } from "@/src/styles/GlobalStyles";
 import { router } from "expo-router";
+import { API_URL } from "@env";
 
 type Medication = {
   taken: boolean;
@@ -33,7 +34,7 @@ export default function ChecklistScreen() {
   const fetchMedications = async () => {
     try {
       const token = await AsyncStorage.getItem("auth_token");
-      const response = await fetch("http://192.168.0.196:8000/medications/checklist/", {
+      const response = await fetch(`${API_URL}/medications/checklist/`, {
         headers: { Authorization: `Token ${token}` },
       });
       const data = await response.json();
@@ -56,7 +57,7 @@ export default function ChecklistScreen() {
       const newValue = !checked[id];
 
       // atualiza no backend
-      await fetch("http://192.168.0.196:8000/medications/checklist/mark/", {
+      await fetch(`${API_URL}/medications/checklist/mark/`, {
         method: "POST",
         headers: {
           Authorization: `Token ${token}`,

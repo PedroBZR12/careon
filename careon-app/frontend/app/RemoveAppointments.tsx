@@ -3,6 +3,8 @@ import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet, ActivityIndi
 import { useAuth } from "@/src/hooks/useAuth";
 import { router } from "expo-router";
 import { GlobalStyles } from "@/src/styles/GlobalStyles";
+import { API_URL } from "@env";
+
 
 type Appointment = {
   id: number | string;
@@ -22,7 +24,7 @@ export default function RemoveAppointmentScreen() {
     }
   const fetchAppointments = async () => {
     try {
-      const response = await fetch("http://192.168.0.196:8000/appointments/compromissos/", {
+      const response = await fetch(`${API_URL}/appointments/compromissos/`, {
         headers: {
           Authorization: `Token ${token}`,
           "Content-Type": "application/json",
@@ -58,7 +60,7 @@ export default function RemoveAppointmentScreen() {
         style: "destructive",
         onPress: async () => {
           try {
-            const response = await fetch(`http://192.168.0.196:8000/appointments/compromissos/${id}/`, {
+            const response = await fetch(`${API_URL}/appointments/compromissos/${id}/`, {
               method: "DELETE",
               headers: {
                 Authorization: `Token ${token}`,
