@@ -14,7 +14,7 @@
         "buildType": "apk"
       },
       "env": {
-        "API_URL": "http://192.168.0.196:8000",
+        "API_URL": "https://careon-backend.onrender.com",
         "SUPABASE_URL": "https://gzgmekduejldtusbxbmp.supabase.co",
         "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
       }

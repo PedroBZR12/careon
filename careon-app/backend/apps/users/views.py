@@ -7,8 +7,11 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from apps.users.models import DeviceToken
+import random
+import string
+import logging
 
-
+logger = logging.getLogger(__name__)
 
 # Cadastro
 class RegisterView(APIView):
@@ -29,36 +32,41 @@ class LoginView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
     def post(self, request):
-        email = request.data.get("email")
-        password = request.data.get("password")
-        print(request.data)
-        
-        if not email or not password:
-            return Response(
-                {"error": "Email e senha são obrigatórios"}, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        try:
+            email = request.data.get("email")
+            password = request.data.get("password")
+            logger.debug("Login attempt for email: %s", email)
+            print(request.data)
             
+            if not email or not password:
+                return Response(
+                    {"error": "Email e senha são obrigatórios"}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+                
+                
+            user = authenticate(request, username=email, password=password)
+            if not user:
+                return Response(
+                    {"error": "Credenciais inválidas"},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
             
-        user = authenticate(request, username=email, password=password)
-        if not user:
-            return Response(
-                {"error": "Credenciais inválidas"},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-        
-        Token.objects.filter(user=user).delete()
-        token = Token.objects.create(user=user)
-        return Response({
-            "token": token.key,
-            "user": {                    
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-            }
-        }, status=status.HTTP_200_OK)
+            Token.objects.filter(user=user).delete()
+            token = Token.objects.create(user=user)
+            return Response({
+                "token": token.key,
+                "user": {                    
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                }
+            }, status=status.HTTP_200_OK)
+        except Exception:
+            logger.exception("Erro em LoginView.post")
+            return Response({"detail": "Internal server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class UserUpdateView(generics.RetrieveUpdateAPIView):
     serializer_class = UserUpdateSerializer
