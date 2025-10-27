@@ -83,11 +83,12 @@ WSGI_APPLICATION = 'backcareon.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": "db.gzgmekduejldtusbxbmp.supabase.co",
-        "PORT": "5432",
+        "HOST": "aws-1-sa-east-1.pooler.supabase.com",
+        "PORT": "6543",
         "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "zAzIkY6q2w5naRjz",  # sem colchetes!
+        "USER": "postgres.gzgmekduejldtusbxbmp",
+        "PASSWORD": "zAzIkY6q2w5naRjz",
+        "POOL_MODE": "transaction",
         "OPTIONS": {
             "sslmode": "require",  # Supabase exige SSL
         },
