@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 import * as FileSystem from "expo-file-system";
+import { SUPABASE_KEY, SUPABASE_URL } from '@env';
 // inicializa o cliente
-const supabase = createClient("https://gzgmekduejldtusbxbmp.supabase.co", 
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6Z21la2R1ZWpsZHR1c2J4Ym1wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1Mzk1NjAsImV4cCI6MjA3MzExNTU2MH0.COUxIibr0zcJ3ZFOOS0ytNHKzBN4-YJ0gV86MA3jtfQ")
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 export async function uploadAvatar(userId: string, fileUri: string) {
   try {

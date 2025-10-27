@@ -5,7 +5,7 @@ import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
 import {  router, useRouter } from "expo-router";
 import { useAuth } from "../src/hooks/useAuth"; 
 import { Picker } from "@react-native-picker/picker";
-import api from "@/services/api";
+import api from "../services/api";
 import { API_URL } from "@env";
 
 export default function AddMedicationScreen() {

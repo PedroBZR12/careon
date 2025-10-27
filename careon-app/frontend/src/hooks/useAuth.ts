@@ -37,6 +37,9 @@ export function useAuth() {
             
             if (result.success && result.token) {
                 await AsyncStorage.setItem(AUTH_TOKEN_KEY, result.token);
+                console.log('[DEBUG] saved token:', result.token);
+                const verify = await AsyncStorage.getItem(AUTH_TOKEN_KEY);
+                console.log('[DEBUG] token after set:', verify);
                 setIsAuthenticated(true);
                 setToken(result.token);
             }

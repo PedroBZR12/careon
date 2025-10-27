@@ -1,5 +1,5 @@
-import { authService } from "@/services/authService";
-import { GlobalStyles } from "@/src/styles/GlobalStyles";
+import { authService } from "../services/authService";
+import { GlobalStyles } from "@/styles/GlobalStyles";
 import { router } from "expo-router";
 import { View, Button, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 

@@ -13,7 +13,7 @@ import { useAuth } from "../src/hooks/useAuth";
 export default function RegisterScreen() {
   const navigation = useNavigation();
   const router = useRouter();
-  const [username, setName] = React.useState("");
+  const [fullName, setFullName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [gender, setGender] = React.useState("");
@@ -26,21 +26,29 @@ export default function RegisterScreen() {
   const formatarData = (data: Date | string) => {
   if (!data) return "";
   const d = new Date(data);
-  const dia = String(d.getDate()).padStart(2, "0");
+  const dia = String(d.getDate() + 1).padStart(2, "0");
   const mes = String(d.getMonth() + 1).padStart(2, "0");
   const ano = d.getFullYear();
   return `${dia}/${mes}/${ano}`;
 };
   const onChange = (event: any, selectedDate?: Date) => {
-    if(Platform.OS === 'android')
-      setShow(false);
-    
-    if (selectedDate) {
-      const isoDate = selectedDate.toISOString().slice(0, 10);
-      setBirthday(isoDate);
-      console.log('Birthday formatado:', isoDate); // debug
-      }
-  };
+  if (Platform.OS === 'android') setShow(false);
+
+  if (selectedDate) {
+    // Extrai os componentes da data local diretamente
+    const dia = selectedDate.getDate();
+    const mes = selectedDate.getMonth();
+    const ano = selectedDate.getFullYear();
+
+    // Formata como yyyy-mm-dd (ex: 2025-10-18)
+    const formatted = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+
+    setBirthday(formatted);
+    console.log('Data corrigida:', formatted);
+  }
+};
+
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -51,14 +59,14 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     
-    if (!username || !email || !password || !gender || !birthday || !phone) {
+    if (!fullName || !email || !password || !gender || !birthday || !phone) {
       Alert.alert("Erro", "Preencha todos os campos");
       return;
     }
     
     try{
         console.log({
-        username,
+        full_name: fullName,
         email,
         password,
         gender,
@@ -66,7 +74,7 @@ export default function RegisterScreen() {
         phone
       });
       const response = await api.post('/users/register/', {
-        username,
+        full_name: fullName,
         email,
         password,
         gender,
@@ -79,18 +87,18 @@ export default function RegisterScreen() {
     const token = response.data.token;
 
     // Salva token localmente
-    await AsyncStorage.setItem('userToken', token);
+    await AsyncStorage.setItem('auth_token', token);
 
 
     Alert.alert('Sucesso', 'Cadastro realizado!');
 
-    router.push('/homeScreen')
+    router.replace('/homeScreen');
 
   } catch (error: any){
     const data = error.response?.data;
     console.log('Error.response.data:', error.response?.data);
     if (data?.email) Alert.alert("Erro", data.email[0]);
-    else if (data?.username) Alert.alert("Erro", data.username[0]);
+    else if (data?.fullName) Alert.alert("Erro", data.fullName[0]);
     else Alert.alert("Erro", "Erro no cadastro");
     Alert.alert('Erro', error.response?.data?.message || 'Erro no servidor');
   }
@@ -101,9 +109,9 @@ export default function RegisterScreen() {
 
       <TextInput
         placeholder="Nome completo"
-        value={username}
-        onChangeText={setName}
-        autoCapitalize="none"
+        value={fullName}
+        onChangeText={setFullName}
+        autoCapitalize="words"
         style={{
           width: '80%',
           padding: 10,

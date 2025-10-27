@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, TextInput, Button, StyleSheet, Alert, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useAuth } from "@/src/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { router } from "expo-router";
 import { API_URL } from "@env";
 

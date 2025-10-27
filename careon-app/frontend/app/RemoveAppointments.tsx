@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, Alert, StyleSheet, ActivityIndicator, Button } from "react-native";
-import { useAuth } from "@/src/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { router } from "expo-router";
-import { GlobalStyles } from "@/src/styles/GlobalStyles";
+import { GlobalStyles } from "@/styles/GlobalStyles";
 import { API_URL } from "@env";
 
 

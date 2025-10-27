@@ -2,18 +2,31 @@
   "extends": "./node_modules/expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "types": [
+      "react-native"
+    ],
+    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "src/*"
       ]
     }
   },
   "include": [
+    "app/**/*",
+    "src/**/*",
     "**/*.ts",
     "**/*.tsx",
-    "env.d.ts",
-    ".expo/types/**/*.ts",
-    "env.d.ts",
-    "expo-env.d.ts"
+    "env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js"
   ]
 }

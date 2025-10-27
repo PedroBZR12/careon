@@ -1,9 +1,25 @@
-import { View, Text } from "react-native";
+// app/index.tsx
+import React, { useEffect } from 'react';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { router } from 'expo-router';
 
 export default function Index() {
+  useEffect(() => {
+   
+    router.replace('/homeScreen');
+  }, []);
+
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>🚀 Index carregado!</Text>
+    <View style={styles.container}>
+      <ActivityIndicator size="large" />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+});

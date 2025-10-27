@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { GlobalStyles } from "@/src/styles/GlobalStyles";
+import { GlobalStyles } from "@/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
-import { Colors } from "@/src/constants/Colors";
+import { Colors } from "@/constants/Colors";
 import { API_URL } from "@env";
 
 export default function UpdateMedicationScreen() {

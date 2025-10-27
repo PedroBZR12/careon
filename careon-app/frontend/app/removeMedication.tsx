@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Button, Alert, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { GlobalStyles } from '@/src/styles/GlobalStyles';
+import { GlobalStyles } from '@/styles/GlobalStyles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from "@env";
 

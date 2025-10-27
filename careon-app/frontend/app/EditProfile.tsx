@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, Platform, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Colors, GlobalStyles } from "@/src/styles/GlobalStyles";
+import { Colors, GlobalStyles } from "@/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from "expo-image-picker"

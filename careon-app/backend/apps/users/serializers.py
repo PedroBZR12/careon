@@ -1,11 +1,27 @@
 # apps/users/serializers.py
+from multiprocessing.managers import Token
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from .models import UserProfile
 from django.db import models
+import random
+import string
+
+
+def generate_username():
+    return 'user_' + ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
+
+
+def split_name(full_name):
+    parts = full_name.strip().split()
+    first_name = parts[0]
+    last_name = ' '.join(parts[1:]) if len(parts) > 1 else ''
+    return first_name, last_name
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
     birthday = serializers.DateField(write_only=True)
     gender = serializers.CharField(write_only=True)
@@ -13,13 +29,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["username", "email", "password", "birthday", "gender", "phone"]
+        fields = ["full_name", "email", "password", "birthday", "gender", "phone"]
 
     
-    def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Este username já está em uso.")
-        return value
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -27,22 +39,27 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        required_fields = ["username", "email", "password", "birthday", "gender", "phone"]
+        required_fields = ["full_name", "email", "password", "birthday", "gender", "phone"]
         for field in required_fields:
             if not data.get(field):
                 raise serializers.ValidationError({field: "Este campo é obrigatório."})
         return data
 
     def create(self, validated_data):
+        full_name = validated_data.pop("full_name")
         birthday = validated_data.pop("birthday")
         gender = validated_data.pop("gender")
         phone = validated_data.pop("phone")
         email = validated_data.pop("email")
-        validated_data["password"] = make_password(validated_data["password"])
+        password = make_password(validated_data["password"])
+        first_name, last_name = split_name(full_name)
+        username = generate_username()
         user = User.objects.create(
-            username=validated_data["username"],
+            username=username,
             email=email,
-            password=make_password(validated_data["password"])
+            password=password,
+            first_name=first_name,
+            last_name=last_name
         )
 
         UserProfile.objects.create(
@@ -52,9 +69,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             gender=gender,
             phone=phone
         )
-
+        
+    
         return user
-
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

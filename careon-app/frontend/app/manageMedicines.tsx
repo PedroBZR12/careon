@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
-import { GlobalStyles } from '@/src/styles/GlobalStyles';
-import { useAuth } from '@/src/hooks/useAuth';
+import { GlobalStyles } from '@/styles/GlobalStyles';
+import { useAuth } from '@/hooks/useAuth';
 import { API_URL } from "@env";
 
 type Medication = {

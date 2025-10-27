@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, Alert, TouchableOpacity, Button } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Checkbox from "expo-checkbox";
-import { GlobalStyles } from "@/src/styles/GlobalStyles";
+import { GlobalStyles } from "@/styles/GlobalStyles";
 import { router } from "expo-router";
 import { API_URL } from "@env";
 
