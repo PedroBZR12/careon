@@ -20,7 +20,7 @@ export default function AddMedicationScreen() {
   const { token } = useAuth();
 
   const handleBack = () => {
-        router.push('/manageMedicines');
+        router.replace('/manageMedicines');
   }
 
 
@@ -35,7 +35,7 @@ export default function AddMedicationScreen() {
       
       console.log(response.data);
       Alert.alert('Sucesso', 'Medicamento salvo');
-      router.push('/manageMedicines')
+      router.replace('/manageMedicines')
     } catch (error){
           if (error instanceof Error) {
   

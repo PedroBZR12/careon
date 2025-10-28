@@ -29,7 +29,7 @@ export default function ChecklistScreen() {
   sunday: "Domingo",
 };
   const handleBack = () => {
-    router.push('/homeScreen');
+    router.replace('/homeScreen');
   }
   const fetchMedications = async () => {
     try {

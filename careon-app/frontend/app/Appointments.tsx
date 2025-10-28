@@ -65,19 +65,19 @@ export default function Appointments() {
   }, [isLoading, token]);
 
   const handleAddAppointment = () => {
-    router.push("/AddAppointments");
+    router.replace("/AddAppointments");
   };
 
   const handleUpdateAppointment = () => {
-    router.push("/UpdateAppointments");
+    router.replace("/UpdateAppointments");
   };
 
   const handleRemoveAppointment = () => {
-    router.push("/RemoveAppointments");
+    router.replace("/RemoveAppointments");
   };
 
   const handleBack = () => {
-    router.push("/homeScreen");
+    router.replace("/homeScreen");
   };
 
  

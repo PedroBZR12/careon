@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, TextInput, Button, StyleSheet, Alert, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { GlobalStyles } from "@/styles/GlobalStyles";
 import { useAuth } from "@/hooks/useAuth";
 import { router } from "expo-router";
 import { API_URL } from "@env";
@@ -26,7 +27,7 @@ export default function UpdateAppointmentScreen() {
   const [showTime, setShowTime] = useState(false);
 
   const handleBack = () => {
-      router.push('/homeScreen');
+      router.replace('/homeScreen');
     }
   const fetchAppointments = async () => {
     try {
@@ -78,7 +79,7 @@ export default function UpdateAppointmentScreen() {
 
       if (response.ok) {
         Alert.alert("Sucesso", "Compromisso atualizado!");
-        router.push("/Appointments");
+        router.replace("/Appointments");
       } else {
         const errData = await response.json();
         Alert.alert("Erro", JSON.stringify(errData));
@@ -89,9 +90,9 @@ export default function UpdateAppointmentScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={GlobalStyles.container}>
         <View style={{marginTop: 20}}>
-            <Text style={styles.title}>Atualizar Compromissos</Text>
+            <Text style={GlobalStyles.title}>Atualizar Compromissos</Text>
         </View>
         
       {!selected ? (
@@ -109,14 +110,14 @@ export default function UpdateAppointmentScreen() {
       ) : (
         <View style={{gap:20}}>
           <TextInput
-            style={styles.input}
+            style={GlobalStyles.input}
             placeholder="Título"
             placeholderTextColor="#999"
             value={title}
             onChangeText={setTitle}
           />
           <TextInput
-            style={styles.input}
+            style={GlobalStyles.input}
             placeholder="Descrição"
             placeholderTextColor="#999"
             value={descricao}
@@ -178,20 +179,12 @@ export default function UpdateAppointmentScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 20 },
   item: {
     padding: 15,
     borderBottomWidth: 1,
     borderColor: "#eee",
     backgroundColor: "#f9f9f9",
     marginBottom: 10,
-    borderRadius: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 15,
     borderRadius: 5,
   },
 });

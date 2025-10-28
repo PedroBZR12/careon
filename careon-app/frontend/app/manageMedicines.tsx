@@ -69,15 +69,15 @@ export default function MedicationHomeScreen() {
   }, [isLoading, token]);
   
   const handleAddMedication = () => {
-    router.push('/medicinesAdd')
+    router.replace('/medicinesAdd')
   };
   
   const handleRemoveMedication = () => {
-    router.push('/removeMedication')
+    router.replace('/removeMedication')
   }
 
   const handleUpdateMedication = () => {
-    router.push('/chooseMedicineToUpdate')
+    router.replace('/chooseMedicineToUpdate')
   }
 
   const mapDays: Record<string, string> = {

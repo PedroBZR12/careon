@@ -24,7 +24,7 @@ export default function RemoveMedicinesScreen() {
   const [medications, setMedications] = useState<Medication[]>([]);
   const [loading, setLoading] = useState(true);
   const handleBack = () => {
-      router.push('/manageMedicines');
+      router.replace('/manageMedicines');
   }
   
   const fetchMedications = async () => {
@@ -58,7 +58,7 @@ export default function RemoveMedicinesScreen() {
     if (response.ok) {
         setMedications((prev) => prev.filter((med) => med.id !== id));
         Alert.alert("Sucesso", "Medicamento removido!");
-        router.push("/manageMedicines");
+        router.replace("/manageMedicines");
       } else {
         Alert.alert("Erro", "Não foi possível remover o medicamento.");
       }

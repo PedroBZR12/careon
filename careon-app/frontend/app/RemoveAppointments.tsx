@@ -20,7 +20,7 @@ export default function RemoveAppointmentScreen() {
   const [loading, setLoading] = useState(true);
 
   const handleBack = () => {
-        router.push('/Appointments');
+        router.replace('/Appointments');
     }
   const fetchAppointments = async () => {
     try {

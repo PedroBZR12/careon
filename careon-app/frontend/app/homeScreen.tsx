@@ -34,7 +34,7 @@ export default function CalendarTestScreen() {
         return false;
       }
 
-      // em Android, opcionalmente configurar canal (se necessário)
+      
       if (Platform.OS === 'android' && Notifications.setNotificationChannelAsync) {
         try {
           await Notifications.setNotificationChannelAsync('default', {
@@ -106,11 +106,11 @@ export default function CalendarTestScreen() {
     fetchUser();
   }, []);
 
-  const handlePress1 = () => { router.push('/manageMedicines'); };
-  const handlePress2 = () => { router.push('/Appointments'); };
-  const handlePress3 = () => { router.push('/MedicationCheckList'); };
-  const handlePress4 = () => { router.push('/searchScreen'); };
-  const handleSettingsPerfil = () => { router.push('/profileSettings'); };
+  const handlePress1 = () => { router.replace('/manageMedicines'); };
+  const handlePress2 = () => { router.replace('/Appointments'); };
+  const handlePress3 = () => { router.replace('/MedicationCheckList'); };
+  const handlePress4 = () => { router.replace('/searchScreen'); };
+  const handleSettingsPerfil = () => { router.replace('/profileSettings'); };
 
   return (
     <View style={styles.container}>

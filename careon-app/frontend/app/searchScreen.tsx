@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import React, { useState } from "react";
 import { TextInput, Text, View, Alert, Button, StyleSheet, ActivityIndicator, FlatList } from "react-native";
 import { API_URL } from "@env";
+import { GlobalStyles } from "@/styles/GlobalStyles";
 
 type Resultado = {
   produto: string;
@@ -17,7 +18,7 @@ export default function searchMedicines() {
     const [erro, setErro] = useState<string | null>(null);
   
     const handleBack = () => {
-        router.push('/homeScreen');
+        router.replace('/homeScreen');
     }
 
     const buscar = async () => {
@@ -42,10 +43,10 @@ export default function searchMedicines() {
     };
 
     return (
-        <View style={styles.container}>
-        <Text style={styles.titulo}>Buscar Remédio</Text>
+        <View style={GlobalStyles.container}>
+        <Text style={GlobalStyles.title}>Buscar Remédio</Text>
         <TextInput
-            style={styles.input}
+            style={GlobalStyles.input}
             placeholder="Digite o nome do medicamento"
             placeholderTextColor="#999"
             value={query}

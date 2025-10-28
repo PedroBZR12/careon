@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from .models import Remedio
 from apps.users.models import DeviceToken  # ou o caminho correto
+from django.db import OperationalError
 import requests
 import json
 
@@ -44,23 +45,27 @@ def check_medication_notifications():
     margin = timedelta(minutes=10)
 
     # percorre todos os remédios cadastrados
-    for remedio in Remedio.objects.all():
-        if remedio.day.lower() == weekday:
-            try:
-                med_time = remedio.time
-            except ValueError:
-                continue  # ignora se o formato for inválido
+    try:
+        for remedio in Remedio.objects.all():
+            if remedio.day.lower() == weekday:
+                try:
+                    med_time = remedio.time
+                except ValueError:
+                    continue  # ignora se o formato for inválido
 
-            med_datetime = datetime.combine(now.date(), med_time)
-            med_datetime = timezone.make_aware(med_datetime)
+                med_datetime = datetime.combine(now.date(), med_time)
+                med_datetime = timezone.make_aware(med_datetime)
 
-            # verifica se estamos dentro da janela de notificação
-            if abs((now - med_datetime)) <= margin:
-                # envia notificação
-                user = remedio.usuario
-                if hasattr(user, "device_token"):
-                    token = user.device_token.token
-                    title = "Hora de tomar seu remédio 💊"
-                    body = f"{remedio.name} ({remedio.dosage}) - {remedio.notes or ''}"
-                    status = send_push_notification(token, title, body)
-                    print(f"Notificação enviada para {user.username} (status {status})")
+                # verifica se estamos dentro da janela de notificação
+                if abs((now - med_datetime)) <= margin:
+                    # envia notificação
+                    user = remedio.usuario
+                    if hasattr(user, "device_token"):
+                        token = user.device_token.token
+                        title = "Hora de tomar seu remédio 💊"
+                        body = f"{remedio.name} ({remedio.dosage}) - {remedio.notes or ''}"
+                        status = send_push_notification(token, title, body)
+                        print(f"Notificação enviada para {user.username} (status {status})")
+    except OperationalError:
+        print("Erro de conexão com o banco. Job ignorado.")
+        return

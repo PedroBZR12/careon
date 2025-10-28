@@ -20,7 +20,7 @@ export default function LoginScreen() {
     const result = await login(email, password);
 
     if(result.success) {
-      router.push("/homeScreen");
+      router.replace("/homeScreen");
     } else{
       Alert.alert("Erro no Login", result.error || "Falha ao fazer login");
     }
@@ -28,7 +28,7 @@ export default function LoginScreen() {
   };
 
   const handleRegister = () => {
-    router.push("/register");
+    router.replace("/register");
   }
 
   const togglePasswordVisibility = () => {

@@ -81,6 +81,8 @@ export const GlobalStyles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
     marginBottom: 15,
+    color: "#000",
+    fontSize: 16
   },
    medItem: {
     padding: 10,

@@ -6,16 +6,16 @@ import { View, Button, StyleSheet, Text, TouchableOpacity, Image } from 'react-n
 export default function profileSettings(){
     
     const handleBack = () => {
-        router.push('/homeScreen');
+        router.replace('/homeScreen');
     }    
     const handleEditProfile = () => {
-        router.push('/EditProfile');
+        router.replace('/EditProfile');
     }
 
     const handleLogout = async () => {
         const result = await authService.logout()
         if(result.success){
-            router.push('/');
+            router.replace('/');
         }
     }
     return (

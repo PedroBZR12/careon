@@ -15,7 +15,7 @@ export default function UpdateMedicationScreen() {
   const [dosage, setDosage] = useState(initialDosage as string)
   const [frequency, setFrequency] = useState(initialFrequency as string)
   const handleBack = () => {
-      router.push('/manageMedicines');
+      router.replace('/manageMedicines');
     }
    const mapDays: Record<string, string> = {
   monday: "Segunda",
@@ -117,14 +117,3 @@ export default function UpdateMedicationScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    width: '80%',
-    padding: 8,
-    marginVertical: 2,
-    borderRadius: 6,
-  },
-});
