@@ -59,6 +59,7 @@ export default function LoginScreen() {
           borderColor: Colors.muted,
           borderRadius: 8,
           marginTop: 20,
+          color: "#000"
         }}
       />
 
@@ -83,6 +84,7 @@ export default function LoginScreen() {
             flex: 1,
             padding: 10,
             borderWidth: 0, // Remove border porque está no container
+            color: "#000"
           }}
         />
         
