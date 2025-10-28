@@ -47,6 +47,7 @@ export default function LoginScreen() {
 
       <TextInput
         placeholder="Email"
+        placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -73,6 +74,7 @@ export default function LoginScreen() {
       }}>
         <TextInput
           placeholder="Senha"
+          placeholderTextColor="#999"
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword} // ← CONTROLA SE MOSTRA OU ESCONDE

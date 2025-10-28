@@ -47,7 +47,7 @@ def check_medication_notifications():
     for remedio in Remedio.objects.all():
         if remedio.day.lower() == weekday:
             try:
-                med_time = datetime.strptime(remedio.time, "%H:%M").time()
+                med_time = remedio.time
             except ValueError:
                 continue  # ignora se o formato for inválido
 

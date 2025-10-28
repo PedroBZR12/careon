@@ -59,6 +59,7 @@ export default function AppointmentsAddScreen() {
       <TextInput
         style={styles.input}
         placeholder="Título do compromisso"
+        placeholderTextColor="#999"
         value={title}
         onChangeText={setTitle}
       />
@@ -66,6 +67,7 @@ export default function AppointmentsAddScreen() {
       <TextInput
         style={styles.input}
         placeholder="Descrição"
+        placeholderTextColor="#999"
         value={descricao}
         onChangeText={setDescricao}
       />

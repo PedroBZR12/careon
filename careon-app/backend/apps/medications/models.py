@@ -10,7 +10,7 @@ class Remedio(models.Model):
         )
     name = models.CharField(max_length=100, db_column="nome_remedio")
     dosage = models.CharField(max_length=50, db_column="dosagem")
-    time = models.CharField(max_length=10, db_column="horario")
+    time = models.TimeField(db_column="horario")
     day = models.CharField(max_length=20, db_column="dia_Semana")
     frequency = models.CharField(max_length=50, db_column="quantidade")
     notes = models.TextField(null=True, blank=True, db_column="observacoes")

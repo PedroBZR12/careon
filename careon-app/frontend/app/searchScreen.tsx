@@ -47,6 +47,7 @@ export default function searchMedicines() {
         <TextInput
             style={styles.input}
             placeholder="Digite o nome do medicamento"
+            placeholderTextColor="#999"
             value={query}
             onChangeText={setQuery}
         />

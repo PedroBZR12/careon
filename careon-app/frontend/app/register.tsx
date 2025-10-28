@@ -109,6 +109,7 @@ export default function RegisterScreen() {
 
       <TextInput
         placeholder="Nome completo"
+        placeholderTextColor="#999"
         value={fullName}
         onChangeText={setFullName}
         autoCapitalize="words"
@@ -124,6 +125,7 @@ export default function RegisterScreen() {
 
       <TextInput
         placeholder="Email"
+        placeholderTextColor="#999"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -150,6 +152,7 @@ export default function RegisterScreen() {
       }}>
         <TextInput
           placeholder="Senha"
+          placeholderTextColor="#999"
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword} // ← CONTROLA SE MOSTRA OU ESCONDE
@@ -201,6 +204,9 @@ export default function RegisterScreen() {
           <Picker.Item label="Feminino" value="female" />
           <Picker.Item label="Outro" value="other" />
         </Picker>
+        {gender !== "" && (
+          <Text>{gender}</Text>
+        )}
       </View>
 
       <View style={{ width: '80%', padding: 10,
@@ -219,6 +225,7 @@ export default function RegisterScreen() {
 
       <TextInput
         placeholder="Telefone"
+        placeholderTextColor="#999"
         value={phone}
         onChangeText={setPhone}
         style={{

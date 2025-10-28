@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Alert, Image, ScrollView, Button } from "react-native";  
 import { TouchableOpacity } from "react-native-gesture-handler";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
 import {  router, useRouter } from "expo-router";
 import { useAuth } from "../src/hooks/useAuth"; 
@@ -9,6 +10,7 @@ import api from "../services/api";
 import { API_URL } from "@env";
 
 export default function AddMedicationScreen() {
+  const [showTimePicker, setShowTimePicker] = useState(false);
   const [name, setName] = useState('');
   const [dosage, setDosage] = useState('');
   const [time, setTime] = useState('');
@@ -55,6 +57,7 @@ export default function AddMedicationScreen() {
       <TextInput
         style={GlobalStyles.input}
         placeholder="Nome do medicamento"
+        placeholderTextColor="#999"
         value={name}
         onChangeText={setName}
       />
@@ -62,6 +65,7 @@ export default function AddMedicationScreen() {
       <TextInput
         style={GlobalStyles.input}
         placeholder="Dosagem (ex: 500mg)"
+        placeholderTextColor="#999"
         value={dosage}
         onChangeText={setDosage}
       />
@@ -94,18 +98,50 @@ export default function AddMedicationScreen() {
                 <Picker.Item label="Sábado" value="saturday" />
                 <Picker.Item label="Domingo" value="sunday" />
               </Picker>
+              {day !== "" && (
+                <Text >Selecionado: {day}</Text>
+              )}
             </View>
 
-      <TextInput
-        style={GlobalStyles.input}
-        placeholder="Horário (ex: 08:00)"
-        value={time}
-        onChangeText={setTime}
-      />
+      <View style={{ marginBottom: 20, width: "100%" }}>
+      <Text style={{ marginBottom: 5 }}>Horário do medicamento:</Text>
+      <TouchableOpacity
+        onPress={() => setShowTimePicker(true)}
+        style={{
+          borderWidth: 1,
+          borderColor: "#666",
+          borderRadius: 8,
+          padding: 10,
+          height: 50,
+          justifyContent: "center",
+        }}
+      >
+        <Text>{time ? time : "Selecionar horário"}</Text>
+      </TouchableOpacity>
+
+      {showTimePicker && (
+        <DateTimePicker
+          value={new Date()}
+          mode="time"
+          is24Hour={true}
+          display="default"
+          onChange={(event, selectedDate) => {
+            setShowTimePicker(false);
+            if (selectedDate) {
+              const hours = selectedDate.getHours().toString().padStart(2, "0");
+              const minutes = selectedDate.getMinutes().toString().padStart(2, "0");
+              setTime(`${hours}:${minutes}`);
+            }
+          }}
+        />
+      )}
+    </View>
+
 
       <TextInput
         style={GlobalStyles.input}
         placeholder="Frequência (ex: 1x ao dia)"
+        placeholderTextColor="#999"
         value={frequency}
         onChangeText={setFrequency}
       />
@@ -113,6 +149,7 @@ export default function AddMedicationScreen() {
       <TextInput
         style={[GlobalStyles.input, { height: 80 }]}
         placeholder="Observações"
+        placeholderTextColor="#999"
         value={notes}
         onChangeText={setNotes}
         multiline

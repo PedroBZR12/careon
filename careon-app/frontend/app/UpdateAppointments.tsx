@@ -111,12 +111,14 @@ export default function UpdateAppointmentScreen() {
           <TextInput
             style={styles.input}
             placeholder="Título"
+            placeholderTextColor="#999"
             value={title}
             onChangeText={setTitle}
           />
           <TextInput
             style={styles.input}
             placeholder="Descrição"
+            placeholderTextColor="#999"
             value={descricao}
             onChangeText={setDescricao}
           />

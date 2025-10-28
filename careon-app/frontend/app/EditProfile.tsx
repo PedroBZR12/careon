@@ -150,6 +150,7 @@ export default function EditarPerfilScreen() {
           <TextInput
             style={GlobalStyles.input}
             placeholder="Usuário"
+            placeholderTextColor="#999"
             value={username}
             onChangeText={setUsername}
           />
@@ -175,6 +176,7 @@ export default function EditarPerfilScreen() {
           <TextInput
             style={GlobalStyles.input}
             placeholder="Email"
+            placeholderTextColor="#999"
             value={email}
             onChangeText={setEmail}
           />
@@ -184,6 +186,7 @@ export default function EditarPerfilScreen() {
           <TextInput
             style={GlobalStyles.input}
             placeholder="Nova senha"
+            placeholderTextColor="#999"
             value={password}
             onChangeText={setPassword}
           />
@@ -194,6 +197,7 @@ export default function EditarPerfilScreen() {
           <TextInput
             style={GlobalStyles.input}
             placeholder="Telefone"
+            placeholderTextColor="#999"
             value={phone}
             onChangeText={setPhone}
           />
@@ -216,7 +220,7 @@ export default function EditarPerfilScreen() {
             onValueChange={(itemValue) => setGender(itemValue)}
             style={{height: 60, width: '100%', padding: 10}}
             mode="dropdown"
-          >
+            >
             <Picker.Item label="Selecione" value="" />
             <Picker.Item label="Masculino" value="male" />
             <Picker.Item label="Feminino" value="female" />
