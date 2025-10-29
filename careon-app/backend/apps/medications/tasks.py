@@ -59,7 +59,7 @@ def check_medication_notifications():
 
                 med_datetime = timezone.make_aware(datetime.combine(now.date(), remedio.time), timezone.get_current_timezone())
                 logger.debug(f"[Tempo] Agora: {now}, Remédio: {med_datetime}, Diferença: {abs(now - med_datetime)}")
-
+                logger.debug(f"[Fuso] now tz: {now.tzinfo}, med_datetime tz: {med_datetime.tzinfo}")
                 # verifica se estamos dentro da janela de notificação
                 if abs((now - med_datetime)) <= margin:
                     logger.info(f"[Notificação] Dentro da janela para {remedio.name} ({remedio.time})")
