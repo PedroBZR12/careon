@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TextInput, Alert, Image, Button } from "react-native";  
+import { View, Text, TextInput, Alert, Image, Button, KeyboardAvoidingView, Platform } from "react-native";
+import { ScrollView, } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
 import {  useRouter } from "expo-router";
@@ -36,7 +37,15 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={[GlobalStyles.container, GlobalStyles.center]}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView
+        contentContainerStyle={[GlobalStyles.container, GlobalStyles.center]}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={[GlobalStyles.container, GlobalStyles.center]}>
       <Text style={GlobalStyles.title}>Bem-Vindo</Text>
 
       <Image 
@@ -113,5 +122,9 @@ export default function LoginScreen() {
       <Button title="Registrar" onPress={handleRegister}/>
         </View>
     </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+
+    
   );
 }

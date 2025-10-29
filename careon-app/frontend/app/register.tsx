@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, TextInput, Alert, Image, Platform, Button } from "react-native";  
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, TextInput, Alert, Image, Platform, Button, KeyboardAvoidingView } from "react-native";  
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
 import api from "../services/api";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import { useAuth } from "../src/hooks/useAuth";
+
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
@@ -104,146 +105,158 @@ export default function RegisterScreen() {
   }
 }
   return (
-    <View style={[GlobalStyles.container, GlobalStyles.center]}>
-      <Text style={GlobalStyles.title}>Faça seu cadastro:</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={[GlobalStyles.container, GlobalStyles.center]}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={[GlobalStyles.container, GlobalStyles.center]}>
+          <Text style={GlobalStyles.title}>Faça seu cadastro:</Text>
 
-      <TextInput
-        placeholder="Nome completo"
-        placeholderTextColor="#999"
-        value={fullName}
-        onChangeText={setFullName}
-        autoCapitalize="words"
-        style={{
-          width: '80%',
-          padding: 10,
-          borderWidth: 1,
-          borderColor: Colors.muted,
-          borderRadius: 8,
-          marginTop: 20,
-        }}
-      />
+          <TextInput
+            placeholder="Nome completo"
+            placeholderTextColor="#999"
+            value={fullName}
+            onChangeText={setFullName}
+            autoCapitalize="words"
+            style={{
+              width: '80%',
+              padding: 10,
+              borderWidth: 1,
+              borderColor: Colors.muted,
+              borderRadius: 8,
+              marginTop: 20,
+            }}
+          />
 
-      <TextInput
-        placeholder="Email"
-        placeholderTextColor="#999"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={{
-          width: '80%',
-          padding: 10,
-          borderWidth: 1,
-          borderColor: Colors.muted,
-          borderRadius: 8,
-          marginTop: 20,
-          color: "#000"
-        }}
-      />
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={{
+              width: '80%',
+              padding: 10,
+              borderWidth: 1,
+              borderColor: Colors.muted,
+              borderRadius: 8,
+              marginTop: 20,
+              color: "#000"
+            }}
+          />
 
-      <View style={{
-        width: '80%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 10,
-        borderWidth: 1,
-        borderColor: Colors.muted,
-        borderRadius: 8,
-        opacity: isLoading ? 0.6 : 1,
-      }}>
-        <TextInput
-          placeholder="Senha"
-          placeholderTextColor="#999"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword} // ← CONTROLA SE MOSTRA OU ESCONDE
-          editable={!isLoading}
-          style={{
-            flex: 1,
-            padding: 10,
-            borderWidth: 0, // Remove border porque está no container
-            color: "#000"
-          }}
-        />
-        
-        {/* ← BOTÃO PARA MOSTRAR/ESCONDER SENHA */}
-        <TouchableOpacity
-          onPress={togglePasswordVisibility}
-          style={{
-            padding: 10,
-            paddingHorizontal: 15,
-          }}
-          disabled={isLoading}
-        >
-          <Text style={{
-            color: Colors.primary,
-            fontSize: 12,
-            fontWeight: 'bold',
+          <View style={{
+            width: '80%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 10,
+            borderWidth: 1,
+            borderColor: Colors.muted,
+            borderRadius: 8,
+            opacity: isLoading ? 0.6 : 1,
           }}>
-            {showPassword ? 'OCULTAR' : 'MOSTRAR'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+            <TextInput
+              placeholder="Senha"
+              placeholderTextColor="#999"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword} // ← CONTROLA SE MOSTRA OU ESCONDE
+              editable={!isLoading}
+              style={{
+                flex: 1,
+                padding: 10,
+                borderWidth: 0, // Remove border porque está no container
+                color: "#000"
+              }}
+            />
+            
+            {/* ← BOTÃO PARA MOSTRAR/ESCONDER SENHA */}
+            <TouchableOpacity
+              onPress={togglePasswordVisibility}
+              style={{
+                padding: 10,
+                paddingHorizontal: 15,
+              }}
+              disabled={isLoading}
+            >
+              <Text style={{
+                color: Colors.primary,
+                fontSize: 12,
+                fontWeight: 'bold',
+              }}>
+                {showPassword ? 'OCULTAR' : 'MOSTRAR'}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-      <View style={{width: '80%', 
-                    marginTop: 10, 
-                    borderColor: Colors.muted, 
-                    borderWidth: 1, 
-                    borderRadius: 8, 
-                    padding: 5,
-                    height: 80
+          <View style={{width: '80%', 
+                        marginTop: 10, 
+                        borderColor: Colors.muted, 
+                        borderWidth: 1, 
+                        borderRadius: 8, 
+                        padding: 5,
+                        height: 80
 
-      }}>
-        <Text>Selecione seu gênero:</Text>
-        <Picker
-          selectedValue={gender}
-          onValueChange={(itemValue) => setGender(itemValue)}
-          style={{height: 60, width: '100%', padding: 10}}
-          mode="dropdown"
-        >
-          <Picker.Item label="Selecione" value="" />
-          <Picker.Item label="Masculino" value="male" />
-          <Picker.Item label="Feminino" value="female" />
-          <Picker.Item label="Outro" value="other" />
-        </Picker>
-        {gender !== "" && (
-          <Text>{gender}</Text>
-        )}
-      </View>
+          }}>
+            <Text>Selecione seu gênero:</Text>
+            <Picker
+              selectedValue={gender}
+              onValueChange={(itemValue) => setGender(itemValue)}
+              style={{height: 60, width: '100%', padding: 10}}
+              mode="dropdown"
+            >
+              <Picker.Item label="Selecione" value="" />
+              <Picker.Item label="Masculino" value="male" />
+              <Picker.Item label="Feminino" value="female" />
+              <Picker.Item label="Outro" value="other" />
+            </Picker>
+            {gender !== "" && (
+              <Text>{gender}</Text>
+            )}
+          </View>
 
-      <View style={{ width: '80%', padding: 10,
-       borderRadius: 8, marginTop: 10 }}>
-        <Button onPress={() => setShow(true)} title={birthday ? formatarData(birthday) : "Selecionar data de nascimento"} />
-      </View>
-      {show && (
-        <DateTimePicker style={{ width: '80%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
-          value={date}
-          mode="date"
-          display="spinner"
-          onChange={onChange}
-          maximumDate={new Date()} // evita datas futuras
-        />
-      )}
+          <View style={{ width: '80%', padding: 10,
+          borderRadius: 8, marginTop: 10 }}>
+            <Button onPress={() => setShow(true)} title={birthday ? formatarData(birthday) : "Selecionar data de nascimento"} />
+          </View>
+          {show && (
+            <DateTimePicker style={{ width: '80%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
+              value={date}
+              mode="date"
+              display="spinner"
+              onChange={onChange}
+              maximumDate={new Date()} // evita datas futuras
+            />
+          )}
 
-      <TextInput
-        placeholder="Telefone"
-        placeholderTextColor="#999"
-        value={phone}
-        onChangeText={setPhone}
-        style={{
-          width: '80%',
-          padding: 10,
-          borderColor: Colors.muted,
-          borderWidth: 1,
-          borderRadius: 8,
-          marginTop: 20,
-        }}
-      />
-      <View style={{marginTop: 20, width: '82%', gap: 15}}>
-        <Button title="Registrar" onPress={handleRegister}></Button>
-        <Button title="Logar" onPress={handleBack} />
-      </View>
+          <TextInput
+            placeholder="Telefone"
+            placeholderTextColor="#999"
+            value={phone}
+            onChangeText={setPhone}
+            style={{
+              width: '80%',
+              padding: 10,
+              borderColor: Colors.muted,
+              borderWidth: 1,
+              borderRadius: 8,
+              marginTop: 20,
+            }}
+          />
+          <View style={{marginTop: 20, width: '82%', gap: 15}}>
+            <Button title="Registrar" onPress={handleRegister}></Button>
+            <Button title="Logar" onPress={handleBack} />
+          </View>
+            
+        </View>
         
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+    
   );
 }

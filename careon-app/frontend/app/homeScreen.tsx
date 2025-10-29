@@ -88,7 +88,7 @@ export default function CalendarTestScreen() {
         const tokenResponse = await Notifications.getExpoPushTokenAsync();
         const fcmToken = (tokenResponse as any).data ?? tokenResponse;
 
-        await fetch(`${API_URL}/api/device-token/`, {
+        await fetch(`${API_URL}/device-token/`, {
           method: "POST",
           headers: {
             "Authorization": `Token ${token}`,

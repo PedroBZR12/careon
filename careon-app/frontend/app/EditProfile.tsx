@@ -218,7 +218,7 @@ export default function EditarPerfilScreen() {
           <Picker
             selectedValue={gender}
             onValueChange={(itemValue) => setGender(itemValue)}
-            style={{height: 60, width: '100%', padding: 10}}
+            style={{height: 60, width: '100%', padding: 10, color: "#000"}}
             mode="dropdown"
             >
             <Picker.Item label="Selecione" value="" />
