@@ -57,8 +57,7 @@ def check_medication_notifications():
                 except ValueError:
                     continue  # ignora se o formato for inválido
 
-                med_datetime = datetime.combine(now.date(), med_time)
-                med_datetime = timezone.make_aware(med_datetime)
+                med_datetime = timezone.make_aware(datetime.combine(now.date(), remedio.time), timezone.get_current_timezone())
                 logger.debug(f"[Tempo] Agora: {now}, Remédio: {med_datetime}, Diferença: {abs(now - med_datetime)}")
 
                 # verifica se estamos dentro da janela de notificação
