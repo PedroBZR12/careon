@@ -10,14 +10,14 @@
     "newArchEnabled": true,
     "extra": {
       "router": {
-    "origin": false
-  },
-  "eas": {
-    "projectId": "ed825fd2-5e11-4ab9-b387-e61caed7045e"
-  }
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ed825fd2-5e11-4ab9-b387-e61caed7045e"
+      }
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {

@@ -6,6 +6,9 @@ from apps.users.models import DeviceToken  # ou o caminho correto
 from django.db import OperationalError
 import requests
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 def send_push_notification(token: str, title: str, body: str):
     """
@@ -32,7 +35,6 @@ def send_push_notification(token: str, title: str, body: str):
     response = requests.post("https://fcm.googleapis.com/fcm/send", headers=headers, data=json.dumps(payload))
     return response.status_code
 
-
 def check_medication_notifications():
     """
     Verifica se há remédios cujo horário está próximo e envia notificação.
@@ -46,7 +48,9 @@ def check_medication_notifications():
 
     # percorre todos os remédios cadastrados
     try:
+        logger.info(f"[Scheduler] Verificando notificações às {now.strftime('%H:%M:%S')}")
         for remedio in Remedio.objects.all():
+            logger.debug(f"[Remédio] Verificando: {remedio.name} para {remedio.usuario.username}")
             if remedio.day.lower() == weekday:
                 try:
                     med_time = remedio.time
@@ -58,6 +62,8 @@ def check_medication_notifications():
 
                 # verifica se estamos dentro da janela de notificação
                 if abs((now - med_datetime)) <= margin:
+                    logger.info(f"[Notificação] Dentro da janela para {remedio.name} ({remedio.time})")
+                    logger.info(f"[Notificação] Enviando para {user.username} - Token: {token}")
                     # envia notificação
                     user = remedio.usuario
                     if hasattr(user, "device_token"):
