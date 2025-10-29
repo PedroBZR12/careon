@@ -62,12 +62,12 @@ def check_medication_notifications():
                 logger.debug(f"[Fuso] now tz: {now.tzinfo}, med_datetime tz: {med_datetime.tzinfo}")
                 # verifica se estamos dentro da janela de notificação
                 if abs((now - med_datetime)) <= margin:
-                    logger.info(f"[Notificação] Dentro da janela para {remedio.name} ({remedio.time})")
-                    logger.info(f"[Notificação] Enviando para {user.username} - Token: {token}")
-                    # envia notificação
                     user = remedio.usuario
+                    logger.info(f"[Notificação] Dentro da janela para {remedio.name} ({remedio.time})")
+                    # envia notificação
                     if hasattr(user, "device_token"):
                         token = user.device_token.token
+                        logger.info(f"[Notificação] Enviando para {user.username} - Token: {token}")
                         title = "Hora de tomar seu remédio 💊"
                         body = f"{remedio.name} ({remedio.dosage}) - {remedio.notes or ''}"
                         status = send_push_notification(token, title, body)
