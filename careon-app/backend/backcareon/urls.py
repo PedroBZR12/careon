@@ -6,8 +6,6 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django.conf import settings
 from django.conf.urls.static import static
 
-def redirect_to_appointments(request):
-    return redirect('appointments/')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -15,7 +13,6 @@ urlpatterns = [
     path('medications/', include('apps.medications.urls')), 
     path('users/', include('apps.users.urls')),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    path('', redirect_to_appointments, name='home'),
     path("medications/", include("apps.medications.urls"))
     
 ]
