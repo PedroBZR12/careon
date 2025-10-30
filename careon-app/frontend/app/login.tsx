@@ -1,9 +1,8 @@
 import React from "react";
-import { View, Text, TextInput, Alert, Image, Button, KeyboardAvoidingView, Platform } from "react-native";
-import { ScrollView, } from "react-native-gesture-handler";
+import { View, Text, TextInput, Alert, Image, Button, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Colors, GlobalStyles } from "../src/styles/GlobalStyles";
-import {  useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useAuth } from "../src/hooks/useAuth"; 
 
 export default function LoginScreen() {
@@ -25,7 +24,6 @@ export default function LoginScreen() {
     } else{
       Alert.alert("Erro no Login", result.error || "Falha ao fazer login");
     }
-    
   };
 
   const handleRegister = () => {
@@ -46,85 +44,80 @@ export default function LoginScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={[GlobalStyles.container, GlobalStyles.center]}>
-      <Text style={GlobalStyles.title}>Bem-Vindo</Text>
+          <Text style={GlobalStyles.title}>Bem-Vindo</Text>
 
-      <Image 
-        source={require("../src/assets/images/image1.png")} 
-        style={{ width: 150, height: 150, marginTop: 20 }} 
-      />
+          <Image 
+            source={require("../src/assets/images/image1.png")} 
+            style={{ width: 150, height: 150, marginTop: 20 }} 
+          />
 
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={{
+              width: '80%',
+              padding: 10,
+              borderWidth: 1,
+              borderColor: Colors.muted,
+              borderRadius: 8,
+              marginTop: 20,
+              color: "#000"
+            }}
+          />
 
-      <TextInput
-        placeholder="Email"
-        placeholderTextColor="#999"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={{
-          width: '80%',
-          padding: 10,
-          borderWidth: 1,
-          borderColor: Colors.muted,
-          borderRadius: 8,
-          marginTop: 20,
-          color: "#000"
-        }}
-      />
-
-      <View style={{
-        width: '80%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 10,
-        borderWidth: 1,
-        borderColor: Colors.muted,
-        borderRadius: 8,
-        opacity: isLoading ? 0.6 : 1,
-      }}>
-        <TextInput
-          placeholder="Senha"
-          placeholderTextColor="#999"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword} // ← CONTROLA SE MOSTRA OU ESCONDE
-          editable={!isLoading}
-          style={{
-            flex: 1,
-            padding: 10,
-            borderWidth: 0, // Remove border porque está no container
-            color: "#000"
-          }}
-        />
-        
-        {/* ← BOTÃO PARA MOSTRAR/ESCONDER SENHA */}
-        <TouchableOpacity
-          onPress={togglePasswordVisibility}
-          style={{
-            padding: 10,
-            paddingHorizontal: 15,
-          }}
-          disabled={isLoading}
-        >
-          <Text style={{
-            color: Colors.primary,
-            fontSize: 12,
-            fontWeight: 'bold'
+          <View style={{
+            width: '80%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginTop: 10,
+            borderWidth: 1,
+            borderColor: Colors.muted,
+            borderRadius: 8,
+            opacity: isLoading ? 0.6 : 1,
           }}>
-            {showPassword ? 'OCULTAR' : 'MOSTRAR'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-      
-        <View style={{gap: 15, width: '82%', marginTop: 30, borderRadius:10}}>
-
-      <Button title="Entrar" onPress={handleLogin}/>
-      <Button title="Registrar" onPress={handleRegister}/>
+            <TextInput
+              placeholder="Senha"
+              placeholderTextColor="#999"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              editable={!isLoading}
+              style={{
+                flex: 1,
+                padding: 10,
+                borderWidth: 0,
+                color: "#000"
+              }}
+            />
+            
+            <TouchableOpacity
+              onPress={togglePasswordVisibility}
+              style={{
+                padding: 10,
+                paddingHorizontal: 15,
+              }}
+              disabled={isLoading}
+            >
+              <Text style={{
+                color: Colors.primary,
+                fontSize: 12,
+                fontWeight: 'bold'
+              }}>
+                {showPassword ? 'OCULTAR' : 'MOSTRAR'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          
+          <View style={{gap: 15, width: '82%', marginTop: 30, borderRadius:10}}>
+            <Button title="Entrar" onPress={handleLogin}/>
+            <Button title="Registrar" onPress={handleRegister}/>
+          </View>
         </View>
-    </View>
       </ScrollView>
     </KeyboardAvoidingView>
-
-    
   );
 }

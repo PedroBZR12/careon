@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, Platform, Image } from "react-native";
+import { View, Text, TextInput, ScrollView , Button, StyleSheet, Alert, ActivityIndicator, Platform, Image, KeyboardAvoidingView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors, GlobalStyles } from "@/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
@@ -8,6 +8,7 @@ import * as ImagePicker from "expo-image-picker"
 import { uploadAvatar } from "../services/supabase"
 import { router } from "expo-router";
 import { API_URL } from "@env";
+
 
 export default function EditarPerfilScreen() {
   
@@ -129,114 +130,126 @@ export default function EditarPerfilScreen() {
   }
 
   return (
-    <View style={GlobalStyles.container}>
-      <View style={styles.container}>
-        <Text style={GlobalStyles.title}>Editar Perfil</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView
+        contentContainerStyle={[GlobalStyles.container, GlobalStyles.center]}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={GlobalStyles.container}>
+          <View style={styles.container}>
+            <Text style={GlobalStyles.title}>Editar Perfil</Text>
 
-        {avatar && (
-          <Image
-            source={{ uri: avatar }}
-            style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 10 }}
-          />
-        )}
-        <View style={{ width: '100%', padding: 10,
-         borderRadius: 8, marginTop: 10}}>
-          <Button title="Trocar foto" onPress={pickImage} />
+            {avatar && (
+              <Image
+                source={{ uri: avatar }}
+                style={{ width: 100, height: 100, borderRadius: 50, marginBottom: 10 }}
+              />
+            )}
+            <View style={{ width: '100%', padding: 10,
+            borderRadius: 8, marginTop: 10}}>
+              <Button title="Trocar foto" onPress={pickImage} />
 
-        </View>
-        
-        <View style={{width:'100%', padding: 10,
-         borderRadius: 8 }}>
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Usuário"
-            placeholderTextColor="#999"
-            value={username}
-            onChangeText={setUsername}
-          />
+            </View>
+            
+            <View style={{width:'100%', padding: 10,
+            borderRadius: 8 }}>
+              <TextInput
+                style={GlobalStyles.input}
+                placeholder="Usuário"
+                placeholderTextColor="#999"
+                value={username}
+                onChangeText={setUsername}
+              />
 
-        </View>
+            </View>
 
-        <View style={{ width: '100%', padding: 10,
-        borderRadius: 8, marginTop: -10}}>
-          <Button onPress={() => setShow(true)} title={birthday ? formatarData(birthday) : "Selecionar data de nascimento"} />
-        </View>
-        {show && (
-          <DateTimePicker style={{ width: '100%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
-            value={date}
-            mode="date"
-            display="spinner"
-            onChange={onChange}
-            maximumDate={new Date()}
-          />
-        )}
-        <View style={{ width: '100%', padding: 10,
-        borderRadius: 8, marginTop: -10}}>
+            <View style={{ width: '100%', padding: 10,
+            borderRadius: 8, marginTop: -10}}>
+              <Button onPress={() => setShow(true)} title={birthday ? formatarData(birthday) : "Selecionar data de nascimento"} />
+            </View>
+            {show && (
+              <DateTimePicker style={{ width: '100%', marginTop: 10, borderRadius: 8, backgroundColor: "#fff" }}
+                value={date}
+                mode="date"
+                display="spinner"
+                onChange={onChange}
+                maximumDate={new Date()}
+              />
+            )}
+            <View style={{ width: '100%', padding: 10,
+            borderRadius: 8, marginTop: -10}}>
 
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Email"
-            placeholderTextColor="#999"
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
-        <View style={{ width: '100%', padding: 10,
-        borderRadius: 8, marginTop: -10}}>
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Nova senha"
-            placeholderTextColor="#999"
-            value={password}
-            onChangeText={setPassword}
-          />
+              <TextInput
+                style={GlobalStyles.input}
+                placeholder="Email"
+                placeholderTextColor="#999"
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
+            <View style={{ width: '100%', padding: 10,
+            borderRadius: 8, marginTop: -10}}>
+              <TextInput
+                style={GlobalStyles.input}
+                placeholder="Nova senha"
+                placeholderTextColor="#999"
+                value={password}
+                onChangeText={setPassword}
+              />
 
-        </View>
-        <View style={{ width: '100%', padding: 10,
-        borderRadius: 8, marginTop: -10}}>
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Telefone"
-            placeholderTextColor="#999"
-            value={phone}
-            onChangeText={setPhone}
-          />
+            </View>
+            <View style={{ width: '100%', padding: 10,
+            borderRadius: 8, marginTop: -10}}>
+              <TextInput
+                style={GlobalStyles.input}
+                placeholder="Telefone"
+                placeholderTextColor="#999"
+                value={phone}
+                onChangeText={setPhone}
+              />
 
-        </View>
-        <View style={{ width: '100%', padding: 10,
-        borderRadius: 8, marginTop: -10}}>
+            </View>
+            <View style={{ width: '100%', padding: 10,
+            borderRadius: 8, marginTop: -10}}>
 
-        <View style={{width: '100%', 
-                      borderColor: Colors.muted, 
-                      borderWidth: 1, 
-                      borderRadius: 8, 
-                      padding: 5,
-                      height: 80
+            <View style={{width: '100%', 
+                          borderColor: Colors.muted, 
+                          borderWidth: 1, 
+                          borderRadius: 8, 
+                          padding: 5,
+                          height: 80
 
-        }}>
-          <Text>Selecione seu gênero:</Text>
-          <Picker
-            selectedValue={gender}
-            onValueChange={(itemValue) => setGender(itemValue)}
-            style={{height: 60, width: '100%', padding: 10, color: "#000"}}
-            mode="dropdown"
-            >
-            <Picker.Item label="Selecione" value="" />
-            <Picker.Item label="Masculino" value="male" />
-            <Picker.Item label="Feminino" value="female" />
-            <Picker.Item label="Outro" value="other" />
-          </Picker>
-        </View>
-      </View>
-        </View>
-        
-          <View style={{marginBottom: 10, gap: 15, marginTop: 30, width: '84%', alignSelf: 'center'}}>
-          <Button title="Salvar" onPress={salvar} />
-            <Button title="Voltar" onPress={handleBack}/>
-          
+            }}>
+              <Text>Selecione seu gênero:</Text>
+              <Picker
+                selectedValue={gender}
+                onValueChange={(itemValue) => setGender(itemValue)}
+                style={{height: 60, width: '100%', padding: 10, color: "#000"}}
+                mode="dropdown"
+                >
+                <Picker.Item label="Selecione" value="" />
+                <Picker.Item label="Masculino" value="male" />
+                <Picker.Item label="Feminino" value="female" />
+                <Picker.Item label="Outro" value="other" />
+              </Picker>
+            </View>
+          </View>
+            </View>
+            
+              <View style={{marginBottom: 10, gap: 15, marginTop: 30, width: '84%', alignSelf: 'center'}}>
+              <Button title="Salvar" onPress={salvar} />
+                <Button title="Voltar" onPress={handleBack}/>
+                  
 
-        </View>
-    </View>
+                </View>
+            </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+
+    
   );
 }
 

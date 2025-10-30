@@ -4,7 +4,6 @@ import { useLocalSearchParams, router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlobalStyles } from "@/styles/GlobalStyles";
 import { Picker } from "@react-native-picker/picker";
-import { Colors } from "@/constants/Colors";
 import { API_URL } from "@env";
 
 export default function UpdateMedicationScreen() {
