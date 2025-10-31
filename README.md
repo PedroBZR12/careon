@@ -14,5 +14,6 @@ No momento, CareOn está em estado de desenvolvimento e não é recomendável ba
 - Expo
 - TypeScript
 - Postgree SQL (Supabase)
+- Render
 - Python e DJango
 - Web Scrapin
