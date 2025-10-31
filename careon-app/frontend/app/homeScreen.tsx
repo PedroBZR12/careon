@@ -11,47 +11,6 @@ import { API_URL } from "@env";
 export default function CalendarTestScreen() {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
-  async function ensureNotificationPermission() {
-    // Não executar no Expo Go
-    if (Constants.appOwnership === 'expo') {
-      console.log('Executando em Expo Go — skip push registration');
-      return false;
-    }
-
-    try {
-      const Notifications = await import('expo-notifications');
-
-      // checar permissões
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const request = await Notifications.requestPermissionsAsync();
-        finalStatus = request.status;
-      }
-
-      if (finalStatus !== 'granted') {
-        console.log('Permissão de notificações negada');
-        return false;
-      }
-
-      
-      if (Platform.OS === 'android' && Notifications.setNotificationChannelAsync) {
-        try {
-          await Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.DEFAULT ?? 4,
-          });
-        } catch (err) {
-          console.warn('Não foi possível criar o notification channel', err);
-        }
-      }
-
-      return true;
-    } catch (err) {
-      console.warn('expo-notifications não inicializado ou não disponível', err);
-      return false;
-    }
-  }
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -80,24 +39,6 @@ export default function CalendarTestScreen() {
         const data = await response.json();
         console.log("JSON parseado:", data);
         setAvatarUrl(data.avatar_url);
-
-        const granted = await ensureNotificationPermission();
-        if (!granted) return;
-
-        const Notifications = await import('expo-notifications');
-        const tokenResponse = await Notifications.getExpoPushTokenAsync();
-        const fcmToken = (tokenResponse as any).data ?? tokenResponse;
-
-        await fetch(`${API_URL}/device-token/`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Token ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token: fcmToken }),
-        });
-
-        console.log("Token FCM enviado com sucesso");
       } catch (err) {
         console.error("Erro ao buscar usuário ou registrar token:", err);
       }

@@ -3,7 +3,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider, DarkTheme, DefaultTheme } from '@react-navigation/native';
-import { useColorScheme } from '../src/hooks/useColorScheme';
+import { useColorScheme } from '..//src/hooks/useColorScheme';
 import { useFonts } from 'expo-font';
 
 export default function RootLayout() {

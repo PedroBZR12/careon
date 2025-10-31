@@ -7,19 +7,17 @@
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
-    "types": [
-      "react-native"
-    ],
+    "types": ["react-native"],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["src/*"]
     }
   },
   "include": [
     "app/**/*",
     "src/**/*",
+    "components",
+    "types",            // <-- garantir que a pasta types seja incluída
     "**/*.ts",
     "**/*.tsx",
     "env.d.ts"

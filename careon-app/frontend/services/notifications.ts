@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import axios from 'axios';
+import { API_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AUTH_TOKEN_KEY = "auth_token";
@@ -23,7 +24,7 @@ export async function registerDeviceToken() {
       return;
     }
 
-    await axios.post("https:http://192.168.0.196:8000/api/device-token/", {
+    await axios.post(`${API_URL}/api/device-token/`, {
       token: fcmToken
     }, {
       headers: {
