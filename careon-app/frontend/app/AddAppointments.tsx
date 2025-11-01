@@ -24,6 +24,9 @@ export default function AppointmentsAddScreen() {
     return `${hours}:${minutes}`;
   };
 
+  const handleBack = () => {
+      router.push("/Appointments");
+    };
 
   const handleSave = async () => {
     if (!title) {
@@ -133,7 +136,7 @@ export default function AppointmentsAddScreen() {
 
 
             <Button title="Salvar" onPress={handleSave} />
-            <Button title="Cancelar" onPress={() => router.back()} />
+            <Button title="Cancelar" onPress={handleBack} />
         </View>
     </View>
   );

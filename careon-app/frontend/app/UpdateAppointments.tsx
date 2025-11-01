@@ -27,7 +27,7 @@ export default function UpdateAppointmentScreen() {
   const [showTime, setShowTime] = useState(false);
 
   const handleBack = () => {
-      router.replace('/homeScreen');
+      router.replace('/Appointments');
     }
   const fetchAppointments = async () => {
     try {
