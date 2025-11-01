@@ -22,56 +22,60 @@ import { router } from "expo-router";
 import { API_URL } from "@env";
 
 export default function EditarPerfilScreen() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    birthday: "",
+    gender: "",
+    phone: "",
+    avatar: null as string | null,
+  });
+
+  const [username, setUsername] = useState(""); // usado só internamente
   const [loading, setLoading] = useState(false);
-  const [birthday, setBirthday] = useState("");
-  const [gender, setGender] = useState("");
-  const [phone, setPhone] = useState("");
+  const [showDate, setShowDate] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(null);
 
-  const formatarData = (dataISO: string) => {
-    if (!dataISO) return "";
-    const [ano, mes, dia] = dataISO.split("-");
-    return `${dia}/${mes}/${ano}`;
+  const formatDate = (iso: string) => {
+    if (!iso) return "";
+    const [y, m, d] = iso.split("-");
+    return `${d}/${m}/${y}`;
   };
 
-  const handleBack = () => {
-    router.push("/homeScreen");
-  };
+  const updateField = (key: string, value: string | null) =>
+    setForm((prev) => ({ ...prev, [key]: value }));
 
-  const onChange = (event: any, selectedDate?: Date) => {
-    if (Platform.OS === "android") setShow(false);
-    if (selectedDate) {
-      const isoDate = selectedDate.toISOString().slice(0, 10);
-      setBirthday(isoDate);
-    }
-  };
+  const handleBack = () => router.push("/homeScreen");
 
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
-      const token = await AsyncStorage.getItem("auth_token");
       try {
-        const res = await fetch(`${API_URL}/users/update/`, {
-          method: "GET",
+        const token = await AsyncStorage.getItem("auth_token");
+        const res = await fetch(`${API_URL}/users/me/`, {
           headers: {
             Authorization: `Token ${token}`,
             "Content-Type": "application/json",
           },
         });
         const data = await res.json();
-        setUsername(data.username || "");
-        setEmail(data.email || "");
-        setPassword(data.password || "");
-        setBirthday(data.birthday || "");
-        setPhone(data.phone || "");
-        setGender(data.gender || "");
-        setAvatar(data.avatar_url || null);
-      } catch (err) {
+
+        setUsername(data.username || ""); // só guarda, não exibe
+        setForm({
+          first_name: data.first_name || "",
+          last_name: data.last_name || "",
+          email: data.email || "",
+          password: "",
+          birthday: data.birthday || "",
+          gender: data.gender || "",
+          phone: data.phone || "",
+          avatar: data.avatar_url || null,
+        });
+
+        if (data.birthday) setDate(new Date(data.birthday));
+      } catch {
         Alert.alert("Erro", "Não foi possível carregar os dados do perfil");
       } finally {
         setLoading(false);
@@ -81,66 +85,84 @@ export default function EditarPerfilScreen() {
   }, []);
 
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.7,
-    });
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.7,
+      });
 
-    if (!result.canceled) {
-      const fileUri = result.assets[0].uri;
-      try {
-        const url = await uploadAvatar(username, fileUri);
-        setAvatar(url);
-      } catch (err) {
-        Alert.alert("Erro", "Não foi possível enviar a foto");
+      if (!result.canceled) {
+        const fileUri = result.assets[0].uri;
+        const url = await uploadAvatar(username, fileUri); // usa username internamente
+        updateField("avatar", url);
       }
+    } catch {
+      Alert.alert("Erro", "Não foi possível enviar a foto");
     }
   };
 
   const salvar = async () => {
     setLoading(true);
-    const token = await AsyncStorage.getItem("auth_token");
     try {
+      const token = await AsyncStorage.getItem("auth_token");
+
+      const body: Record<string, any> = {
+        first_name: form.first_name,
+        last_name: form.last_name,
+        email: form.email,
+        birthday: form.birthday,
+        gender: form.gender,
+        phone: form.phone,
+        avatar_url: form.avatar,
+      };
+
+      if (form.password?.trim()) {
+        body.password = form.password;
+      }
+
       const res = await fetch(`${API_URL}/users/update/`, {
         method: "PUT",
         headers: {
           Authorization: `Token ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-          birthday,
-          gender,
-          phone,
-          avatar_url: avatar,
-        }),
+        body: JSON.stringify(body),
       });
+
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = text;
+      }
 
       if (res.ok) {
         Alert.alert("Sucesso", "Perfil atualizado com sucesso!");
       } else {
-        const errData = await res.json();
-        Alert.alert("Erro", JSON.stringify(errData));
+        console.error("Erro do servidor:", data);
+        Alert.alert("Erro", "Não foi possível atualizar o perfil.");
       }
-    } catch (err) {
-      Alert.alert("Erro", "Não foi possível atualizar o perfil");
+    } catch {
+      Alert.alert("Erro", "Falha ao conectar com o servidor");
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <ActivityIndicator
-        size="large"
-        style={{ flex: 1, justifyContent: "center" }}
-      />
-    );
-  }
+  const handleDateChange = (_: any, selected?: Date) => {
+    if (Platform.OS === "android") setShowDate(false);
+    if (selected) {
+      const iso = selected.toISOString().slice(0, 10);
+      updateField("birthday", iso);
+      setDate(selected);
+    }
+  };
+
+  if (loading)
+    return <ActivityIndicator size="large" style={{ flex: 1, marginTop: 50 }} />;
 
   return (
     <KeyboardAvoidingView
@@ -149,107 +171,91 @@ export default function EditarPerfilScreen() {
       keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
     >
       <ScrollView
-        contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+        contentContainerStyle={{ padding: 20 }}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
       >
         <Text style={GlobalStyles.title}>Editar Perfil</Text>
 
-        {avatar && (
-          <View style={{ alignItems: "center", marginBottom: 10 }}>
+        {form.avatar && (
+          <View style={styles.avatarContainer}>
             <Image
-              source={{ uri: avatar }}
-              style={{
-                width: 100,
-                height: 100,
-                borderRadius: 50,
-                marginBottom: 10,
-              }}
+              source={{ uri: form.avatar }}
+              style={styles.avatar}
+              onError={() => updateField("avatar", null)}
             />
           </View>
         )}
 
-        <View style={styles.inputGroup}>
-          <Button title="Trocar foto" onPress={pickImage} />
-        </View>
+        <Button title="Trocar foto" onPress={pickImage} />
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Usuário"
-            placeholderTextColor="#999"
-            value={username}
-            onChangeText={setUsername}
-          />
-        </View>
+        <TextInput
+          style={GlobalStyles.input}
+          placeholder="Nome"
+          value={form.first_name}
+          onChangeText={(v) => updateField("first_name", v)}
+        />
 
-        <View style={styles.inputGroup}>
-          <Button
-            onPress={() => setShow(true)}
-            title={
-              birthday
-                ? formatarData(birthday)
-                : "Selecionar data de nascimento"
-            }
-          />
-        </View>
+        <TextInput
+          style={GlobalStyles.input}
+          placeholder="Sobrenome"
+          value={form.last_name}
+          onChangeText={(v) => updateField("last_name", v)}
+        />
 
-        {show && (
+        <Button
+          title={
+            form.birthday
+              ? formatDate(form.birthday)
+              : "Selecionar data de nascimento"
+          }
+          onPress={() => setShowDate(true)}
+        />
+
+        {showDate && (
           <DateTimePicker
-            style={styles.datePicker}
             value={date}
             mode="date"
             display="spinner"
-            onChange={onChange}
+            onChange={handleDateChange}
             maximumDate={new Date()}
           />
         )}
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Email"
-            placeholderTextColor="#999"
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
+        <TextInput
+          style={GlobalStyles.input}
+          placeholder="Email"
+          value={form.email}
+          onChangeText={(v) => updateField("email", v)}
+        />
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Nova senha"
-            placeholderTextColor="#999"
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
+        <TextInput
+          style={GlobalStyles.input}
+          placeholder="Nova senha"
+          secureTextEntry
+          value={form.password}
+          onChangeText={(v) => updateField("password", v)}
+        />
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={GlobalStyles.input}
-            placeholder="Telefone"
-            placeholderTextColor="#999"
-            value={phone}
-            onChangeText={setPhone}
-          />
-        </View>
+        <TextInput
+          style={GlobalStyles.input}
+          placeholder="Telefone"
+          value={form.phone}
+          onChangeText={(v) => updateField("phone", v)}
+        />
 
-        <View style={styles.inputGroup}>
-          <View style={styles.pickerContainer}>
-            <Text>Selecione seu gênero:</Text>
-            <Picker
-              selectedValue={gender}
-              onValueChange={(itemValue) => setGender(itemValue)}
-              style={styles.picker}
-              mode="dropdown"
-            >
-              <Picker.Item label="Selecione" value="" />
-              <Picker.Item label="Masculino" value="male" />
-              <Picker.Item label="Feminino" value="female" />
-              <Picker.Item label="Outro" value="other" />
-            </Picker>
-          </View>
+        <View style={styles.pickerContainer}>
+          <Text>Selecione seu gênero:</Text>
+          <Picker
+            selectedValue={form.gender}
+            onValueChange={(v) => updateField("gender", v)}
+            style={styles.picker}
+            mode="dropdown"
+          >
+            <Picker.Item label="Selecione" value="" />
+            <Picker.Item label="Masculino" value="male" />
+            <Picker.Item label="Feminino" value="female" />
+            <Picker.Item label="Outro" value="other" />
+          </Picker>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -263,9 +269,14 @@ export default function EditarPerfilScreen() {
 }
 
 const styles = StyleSheet.create({
-  inputGroup: {
-    width: "100%",
-    paddingVertical: 10,
+  avatarContainer: {
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   pickerContainer: {
     width: "100%",
@@ -274,17 +285,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 5,
     height: 80,
+    marginTop: 10,
   },
   picker: {
     height: 60,
-    width: "100%",
     color: "#000",
-  },
-  datePicker: {
-    width: "100%",
-    marginTop: 10,
-    borderRadius: 8,
-    backgroundColor: "#fff",
   },
   buttonContainer: {
     marginTop: 30,

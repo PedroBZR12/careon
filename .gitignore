@@ -196,3 +196,7 @@ coverage.xml
 # Expo
 
 .expo/
+
+# Android
+
+/android/

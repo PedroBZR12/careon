@@ -77,32 +77,39 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ["birthday", "gender", "phone", "email"]
-        
+        fields = ["birthday", "gender", "phone", "email", "avatar_url"]
+
 
 class UserDetailSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = ["username", "email", "profile"]
+        fields = ["first_name", "last_name", "email", "profile"]
+
 
 class UserUpdateSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=False, allow_blank=True)
+    last_name = serializers.CharField(required=False, allow_blank=True)
     email = serializers.EmailField(required=False)
     birthday = serializers.DateField(required=False)
     gender = serializers.CharField(required=False)
     phone = serializers.CharField(required=False)
     password = serializers.CharField(write_only=True, required=False)
     avatar_url = serializers.URLField(required=False, allow_blank=True, allow_null=True)
-    
-    
-    
+
     class Meta:
         model = User
-        fields = ["username", "email", "birthday", "gender", "phone", "password", "avatar_url"]
-
-
-
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "birthday",
+            "gender",
+            "phone",
+            "password",
+            "avatar_url",
+        ]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -111,35 +118,29 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             rep["birthday"] = profile.birthday
             rep["gender"] = profile.gender
             rep["phone"] = profile.phone
-            rep["email"] = profile.email
             rep["avatar_url"] = profile.avatar_url if profile.avatar_url else None
         return rep
 
     def update(self, instance, validated_data):
-        if "username" in validated_data:
-            instance.username = validated_data["username"]
+        validated_data.pop("username", None)
 
-        if "email" in validated_data:
-            instance.email = validated_data["email"]
-            if hasattr(instance, "profile"):
-                instance.profile.email = validated_data["email"]
+        for field in ["first_name", "last_name", "email"]:
+            if field in validated_data:
+                setattr(instance, field, validated_data[field])
 
-        if "password" in validated_data and validated_data["password"]:
-            instance.set_password(validated_data["password"])
+        password = validated_data.get("password")
+        if password:
+            instance.set_password(password)
 
         profile = getattr(instance, "profile", None)
         if profile:
-            if "birthday" in validated_data:
-                profile.birthday = validated_data["birthday"]
-            if "gender" in validated_data:
-                profile.gender = validated_data["gender"]
-            if "phone" in validated_data:
-                profile.phone = validated_data["phone"]
-            if "avatar_url" in validated_data:
-                profile.avatar_url = validated_data["avatar_url"]
+            for field in ["birthday", "gender", "phone", "avatar_url"]:
+                if field in validated_data:
+                    setattr(profile, field, validated_data[field])
             profile.save()
 
         instance.save()
         return instance
+
 
 

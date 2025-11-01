@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert, Platform, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Alert, Platform, TouchableOpacity, KeyboardAvoidingView, ScrollView } from "react-native";
 import { GlobalStyles } from "@/styles/GlobalStyles";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
@@ -64,10 +64,19 @@ export default function AppointmentsAddScreen() {
   };
 
   return (
-    <View style={styles.container}>
-        <View style={{marginTop: 25}}>
-            <Text style={styles.title}>Adicionar Compromisso</Text>
-        </View>
+  <KeyboardAvoidingView
+    style={{ flex: 1, backgroundColor: "#fff" }}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+  >
+    <ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={{ marginTop: 25 }}>
+        <Text style={styles.title}>Adicionar Compromisso</Text>
+      </View>
 
       <TextInput
         style={GlobalStyles.input}
@@ -84,62 +93,62 @@ export default function AppointmentsAddScreen() {
         value={descricao}
         onChangeText={setDescricao}
       />
-        <View style={{gap: 20}}>
 
-            <TouchableOpacity
-              onPress={() => setShowDate(true)}
-              style={styles.datePicker}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.datePickerText}>
-                {date ? `Data: ${formatDate(date)}` : "Selecionar Data"}
-              </Text>
-            </TouchableOpacity>
+      <View style={{ gap: 20 }}>
+        <TouchableOpacity
+          onPress={() => setShowDate(true)}
+          style={styles.datePicker}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.datePickerText}>
+            {date ? `Data: ${formatDate(date)}` : "Selecionar Data"}
+          </Text>
+        </TouchableOpacity>
 
-            {showDate && (
-              <DateTimePicker
-                value={date}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  setShowDate(false);
-                  if (selectedDate) {
-                    setDate(selectedDate);
-                  }
-                }}
-              />
-            )}
+        {showDate && (
+          <DateTimePicker
+            value={date}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              setShowDate(false);
+              if (selectedDate) {
+                setDate(selectedDate);
+              }
+            }}
+          />
+        )}
 
-              <TouchableOpacity
-                onPress={() => setShowTime(true)}
-                style={styles.timePicker}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.timePickerText}>
-                  {time ? `Horário: ${formatTime(time)}` : "Selecionar Horário"}
-                </Text>
-              </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setShowTime(true)}
+          style={styles.timePicker}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.timePickerText}>
+            {time ? `Horário: ${formatTime(time)}` : "Selecionar Horário"}
+          </Text>
+        </TouchableOpacity>
 
-              {showTime && (
-                <DateTimePicker
-                  value={time}
-                  mode="time"
-                  display="default"
-                  onChange={(event, selectedTime) => {
-                    setShowTime(false);
-                    if (selectedTime) {
-                      setTime(selectedTime);
-                    }
-                  }}
-                />
-              )}
+        {showTime && (
+          <DateTimePicker
+            value={time}
+            mode="time"
+            display="default"
+            onChange={(event, selectedTime) => {
+              setShowTime(false);
+              if (selectedTime) {
+                setTime(selectedTime);
+              }
+            }}
+          />
+        )}
 
-
-            <Button title="Salvar" onPress={handleSave} />
-            <Button title="Cancelar" onPress={handleBack} />
-        </View>
-    </View>
-  );
+        <Button title="Salvar" onPress={handleSave} />
+        <Button title="Cancelar" onPress={handleBack} />
+      </View>
+    </ScrollView>
+  </KeyboardAvoidingView>
+);
 }
 
 const styles = StyleSheet.create({
