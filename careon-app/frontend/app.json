@@ -1,5 +1,26 @@
 {
-  "plugins": [
-    "expo-router"
-  ]
+  "expo": {
+    "name": "CareOn",
+    "slug": "careon-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/images/CareOn.png",
+    "plugins": [
+      "expo-router"
+    ],
+    "platforms": [
+      "android"
+    ],
+    "android": {
+      "icon": "./src/assets/images/CareOn.png",
+      "package": "com.vitalcode.careon",
+      "versionCode": 1
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8db6e0f2-f735-485a-b594-f5a70db4f074"
+      }
+    }
+  }
 }
