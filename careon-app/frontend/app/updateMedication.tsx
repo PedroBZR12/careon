@@ -29,7 +29,7 @@ export default function UpdateMedicationScreen() {
     try {
       const token = await AsyncStorage.getItem("auth_token");
       const response = await fetch(`${API_URL}/medications/${id}/update/`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Authorization": `Token ${token}`,
           "Content-Type": "application/json",
