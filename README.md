@@ -30,5 +30,5 @@ Após acessar o link, basta clicar em install e depois instalar o aplicativo!
 - Composição das telas, integração com as APIs do backend, validação de dados, ajuste de telas com KeyboardAvoidingView e ScrollView, configuração de variáveis de ambiente para build do APK, comportamento de cada módulo/compomente, criação de arquivos para comunicação com API e validação de token, build no expo.
 
 ### BackEnd
-- Desenvolvimento das APIs, comunicação com o banco de dados, web scrapin (buscar por dados na web)
+- Desenvolvimento das APIs, comunicação com o banco de dados, web scrapin, supabase (Postgree SQL)
 
