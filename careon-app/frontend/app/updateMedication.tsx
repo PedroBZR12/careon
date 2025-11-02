@@ -110,6 +110,7 @@ export default function UpdateMedicationScreen() {
         value={time}
         onChangeText={setTime}
         placeholder="Horário (ex: 08:30)"
+        placeholderTextColor="#999"
       />
       <View style={{width: '100%', gap: 15}}>
         <Button title="Salvar alterações" onPress={handleUpdate} />
