@@ -26,9 +26,39 @@ export default function UpdateAppointmentScreen() {
   const [time, setTime] = useState(new Date());
   const [showTime, setShowTime] = useState(false);
 
+  // Formata data para exibição (DD/MM/YYYY)
+  const formatDateDisplay = (date: Date): string => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  // Formata data para envio ao backend (YYYY-MM-DD)
+  const formatDateISO = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Formata data ISO string para exibição (DD/MM/YYYY)
+  const formatISOToDisplay = (iso: string): string => {
+    if (!iso) return "";
+    const [y, m, d] = iso.split("-");
+    return `${d}/${m}/${y}`;
+  };
+
+  const formatTime = (time: Date): string => {
+    const hours = time.getHours().toString().padStart(2, "0");
+    const minutes = time.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+  };
+
   const handleBack = () => {
-      router.replace('/Appointments');
-    }
+    router.replace('/Appointments');
+  };
+
   const fetchAppointments = async () => {
     try {
       const response = await fetch(`${API_URL}/appointments/compromissos/`, {
@@ -54,9 +84,14 @@ export default function UpdateAppointmentScreen() {
     setSelected(appt);
     setTitle(appt.tipo_compromisso);
     setDescricao(appt.descricao);
-    setDate(new Date(appt.data));
-    const [h, m] = appt.horario.split(":");
-    setTime(new Date(2000, 1, 1, parseInt(h), parseInt(m)));
+    
+    // Parse da data sem problemas de timezone
+    const [y, m, d] = appt.data.split("-");
+    setDate(new Date(parseInt(y), parseInt(m) - 1, parseInt(d)));
+    
+    // Parse do horário
+    const [h, min] = appt.horario.split(":");
+    setTime(new Date(2000, 0, 1, parseInt(h), parseInt(min)));
   };
 
   const handleUpdate = async () => {
@@ -72,8 +107,8 @@ export default function UpdateAppointmentScreen() {
         body: JSON.stringify({
           tipo_compromisso: title,
           descricao,
-          data: date.toISOString().slice(0, 10),
-          horario: time.toTimeString().slice(0, 5),
+          data: formatDateISO(date),
+          horario: formatTime(time),
         }),
       });
 
@@ -91,24 +126,23 @@ export default function UpdateAppointmentScreen() {
 
   return (
     <View style={GlobalStyles.container}>
-        <View style={{marginTop: 20}}>
-            <Text style={GlobalStyles.title}>Atualizar Compromissos</Text>
-        </View>
-        
+      <View style={{ marginTop: 20 }}>
+        <Text style={GlobalStyles.title}>Atualizar Compromissos</Text>
+      </View>
+
       {!selected ? (
         <FlatList
           data={appointments}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.item} onPress={() => handleSelect(item)}>
-              <Text>{item.tipo_compromisso} - {item.data} {item.horario}</Text>
+              <Text>{item.tipo_compromisso} - {formatISOToDisplay(item.data)} {item.horario}</Text>
             </TouchableOpacity>
           )}
           ListEmptyComponent={<Text>Nenhum compromisso encontrado.</Text>}
         />
-        
       ) : (
-        <View style={{gap:20}}>
+        <View style={{ gap: 20 }}>
           <TextInput
             style={GlobalStyles.input}
             placeholder="Título"
@@ -124,54 +158,51 @@ export default function UpdateAppointmentScreen() {
             onChangeText={setDescricao}
           />
 
-         <View style={{gap:20}}>
+          <View style={{ gap: 20 }}>
             <Button
-            title={date ? `Data: ${date.toISOString().slice(0, 10)}` : "Selecionar Data"}
-            onPress={() => setShowDate(true)}
+              title={date ? `Data: ${formatDateDisplay(date)}` : "Selecionar Data"}
+              onPress={() => setShowDate(true)}
             />
             {showDate && (
-            <DateTimePicker
+              <DateTimePicker
                 value={date}
                 mode="date"
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedDate) => {
-                setShowDate(false);
-                if (selectedDate) {
+                  setShowDate(false);
+                  if (selectedDate) {
                     setDate(selectedDate);
-                }
+                  }
                 }}
-            />
+              />
             )}
 
-        <Button
-            title={time ? `Horário: ${time.toTimeString().slice(0, 5)}` : "Selecionar Horário"}
-            onPress={() => setShowTime(true)}
+            <Button
+              title={time ? `Horário: ${formatTime(time)}` : "Selecionar Horário"}
+              onPress={() => setShowTime(true)}
             />
             {showTime && (
-            <DateTimePicker
+              <DateTimePicker
                 value={time}
                 mode="time"
                 display={Platform.OS === "ios" ? "spinner" : "default"}
                 onChange={(event, selectedTime) => {
-                setShowTime(false);
-                if (selectedTime) {
+                  setShowTime(false);
+                  if (selectedTime) {
                     setTime(selectedTime);
-                }
+                  }
                 }}
-            />
+              />
             )}
-            <View style={{gap: 15}}>
-                <Button title="Salvar Alterações" onPress={handleUpdate} />
-                <Button title="Cancelar" onPress={() => setSelected(null)} />
-
+            <View style={{ gap: 15 }}>
+              <Button title="Salvar Alterações" onPress={handleUpdate} />
+              <Button title="Cancelar" onPress={() => setSelected(null)} />
             </View>
-            
-            </View>
-            
+          </View>
         </View>
       )}
-      <View style={{marginBottom:30}}>
-        <Button title="Voltar" onPress={handleBack}/>
+      <View style={{ marginBottom: 30 }}>
+        <Button title="Voltar" onPress={handleBack} />
       </View>
     </View>
   );

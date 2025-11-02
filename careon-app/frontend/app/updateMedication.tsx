@@ -59,11 +59,13 @@ export default function UpdateMedicationScreen() {
         value={name}
         onChangeText={setName}
         placeholder="Nome do medicamento"
+        placeholderTextColor="#999"
       />
       
       <TextInput
         style={GlobalStyles.input}
         placeholder="Dosagem (ex: 500mg)"
+        placeholderTextColor="#999"
         value={dosage}
         onChangeText={setDosage}
       />
@@ -71,6 +73,7 @@ export default function UpdateMedicationScreen() {
       <TextInput
         style={GlobalStyles.input}
         placeholder="1x ao dia"
+        placeholderTextColor="#999"
         value={frequency}
         onChangeText={setFrequency}
       />
@@ -82,14 +85,13 @@ export default function UpdateMedicationScreen() {
         borderRadius: 8, 
         padding: 5,
         height: 80,
-        marginBottom:25
-      
+        marginBottom:25,
       }}>
         <Text>Selecione os dias:</Text>
         <Picker
           selectedValue={day}
           onValueChange={(itemValue) => setDay(itemValue)}
-          style={{height: 60, width: '100%', padding: 10}}
+          style={{height: 60, width: '100%', padding: 10, color: "#000"}}
           mode="dropdown"
         >
           <Picker.Item label="Selecione" value="" />

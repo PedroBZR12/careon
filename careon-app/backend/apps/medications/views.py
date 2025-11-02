@@ -42,30 +42,93 @@ class RemedioDeleteView(APIView):
         
 class RemedioUpdateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    
     def put(self, request, pk):
+        print("=== PUT REMEDIO ===")
+        print(f"PK recebido: {pk}")
+        print(f"User autenticado: {request.user}")
+        print(f"User ID: {request.user.id}")
+        print(f"Data recebida: {request.data}")
+        print(f"Headers: {dict(request.headers)}")
+        
         try:
             remedio = Remedio.objects.get(pk=pk, usuario=request.user)
+            print(f"Remédio encontrado: {remedio.name} (ID: {remedio.id})")
+            print(f"Dados atuais do remédio:")
+            print(f"  - name: {remedio.name}")
+            print(f"  - dosage: {remedio.dosage}")
+            print(f"  - day: {remedio.day}")
+            print(f"  - time: {remedio.time}")
+            print(f"  - usuario_id: {remedio.usuario_id}")
         except Remedio.DoesNotExist:
+            print(f"ERRO: Remédio com pk={pk} não encontrado para o usuário {request.user}")
+            # Verifica se o remédio existe mas para outro usuário
+            try:
+                remedio_outro = Remedio.objects.get(pk=pk)
+                print(f"ATENÇÃO: Remédio existe mas pertence ao usuário {remedio_outro.usuario_id}")
+            except Remedio.DoesNotExist:
+                print(f"Remédio com pk={pk} não existe no banco")
             return Response({"error": "Remédio não encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
+        print("\n--- Validando serializer ---")
         serializer = RemedioSerializer(remedio, data=request.data)
-        if serializer.is_valid():
-            serializer.save(usuario=request.user)  
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        is_valid = serializer.is_valid()
+        print(f"Serializer válido? {is_valid}")
+        
+        if is_valid:
+            print(f"Dados validados: {serializer.validated_data}")
+            try:
+                updated_remedio = serializer.save(usuario=request.user)
+                print(f"Remédio atualizado com sucesso!")
+                print(f"Novos dados:")
+                print(f"  - name: {updated_remedio.name}")
+                print(f"  - dosage: {updated_remedio.dosage}")
+                print(f"  - day: {updated_remedio.day}")
+                print(f"  - time: {updated_remedio.time}")
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except Exception as e:
+                print(f"ERRO ao salvar: {type(e).__name__}: {str(e)}")
+                import traceback
+                print(traceback.format_exc())
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            print(serializer.errors)
+            print(f"Erros de validação: {serializer.errors}")
+            print(f"Detalhes dos erros:")
+            for field, errors in serializer.errors.items():
+                print(f"  - {field}: {errors}")
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def patch(self, request, pk):       
+    def patch(self, request, pk):
+        print("=== PATCH REMEDIO ===")
+        print(f"PK recebido: {pk}")
+        print(f"User autenticado: {request.user}")
+        print(f"Data recebida (partial): {request.data}")
+        
         try:
             remedio = Remedio.objects.get(pk=pk, usuario=request.user)
+            print(f"Remédio encontrado: {remedio.name} (ID: {remedio.id})")
         except Remedio.DoesNotExist:
+            print(f"ERRO: Remédio com pk={pk} não encontrado")
             return Response({"error": "Remédio não encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
+        print("\n--- Validando serializer (partial=True) ---")
         serializer = RemedioSerializer(remedio, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save(usuario=request.user)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        is_valid = serializer.is_valid()
+        print(f"Serializer válido? {is_valid}")
+        
+        if is_valid:
+            print(f"Dados validados: {serializer.validated_data}")
+            try:
+                updated_remedio = serializer.save(usuario=request.user)
+                print(f"Remédio atualizado com sucesso (PATCH)!")
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except Exception as e:
+                print(f"ERRO ao salvar: {type(e).__name__}: {str(e)}")
+                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            print(f"Erros de validação: {serializer.errors}")
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class DailyChecklistView(APIView):
