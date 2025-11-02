@@ -10,6 +10,8 @@ CareOn é um aplicativo de gestão de saúde rotineira. Nele, você pode cadastr
 Segue o link para baixar o aplicativo e testar! Melhorias na interface e novas features serão adicionadas no futuro!
 https://expo.dev/accounts/vital-code/projects/careon-app/builds/6dd2c458-9b79-4e88-aa70-0c3ee633a319
 
+Após acessar o link, basta clicar em install e depois instalar o aplicativo!
+
 ## Tecnologias utilizadas
 - React Native
 - Expo
