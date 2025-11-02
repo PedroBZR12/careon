@@ -19,6 +19,7 @@ class CompromissoListCreateAPIView(APIView):
         
         if serializer.is_valid():
             try:
+                serializer.save(usuario=request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except Exception as e:
                 return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
