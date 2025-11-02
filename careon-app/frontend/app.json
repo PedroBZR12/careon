@@ -5,17 +5,8 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/CareOn.png",
-    "plugins": [
-      "expo-router"
-    ],
-    "platforms": [
-      "android"
-    ],
-    "android": {
-      "icon": "./src/assets/images/CareOn.png",
-      "package": "com.vitalcode.careon",
-      "versionCode": 1
-    },
+    "plugins": ["expo-router"],
+    "platforms": ["android"],
     "extra": {
       "router": {},
       "eas": {

@@ -9,7 +9,7 @@ export default function profileSettings(){
         router.replace('/homeScreen');
     }    
     const handleEditProfile = () => {
-        router.replace('/EditProfile');
+        router.push('/EditProfile');
     }
 
     const handleLogout = async () => {

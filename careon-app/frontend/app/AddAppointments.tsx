@@ -14,8 +14,21 @@ export default function AppointmentsAddScreen() {
   const [showDate, setShowDate] = useState(false);
   const [time, setTime] = useState(new Date());
   const [showTime, setShowTime] = useState(false);
-  const formatDate = (date: Date): string => {
-    return date.toISOString().slice(0, 10); // formato YYYY-MM-DD
+  
+  // Formata data para exibição (DD/MM/YYYY)
+  const formatDateDisplay = (date: Date): string => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  // Formata data para envio ao backend (YYYY-MM-DD)
+  const formatDateISO = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   };
 
   const formatTime = (time: Date): string => {
@@ -25,8 +38,8 @@ export default function AppointmentsAddScreen() {
   };
 
   const handleBack = () => {
-      router.push("/Appointments");
-    };
+    router.push("/Appointments");
+  };
 
   const handleSave = async () => {
     if (!title) {
@@ -44,11 +57,10 @@ export default function AppointmentsAddScreen() {
         body: JSON.stringify({
           tipo_compromisso: title,
           descricao,
-          data: date.toISOString().slice(0, 10), 
-          horario: time.toTimeString().slice(0, 5), 
+          data: formatDateISO(date),
+          horario: formatTime(time),
         }),
       });
-      
 
       if (response.ok) {
         Alert.alert("Sucesso", "Compromisso adicionado!");
@@ -64,91 +76,91 @@ export default function AppointmentsAddScreen() {
   };
 
   return (
-  <KeyboardAvoidingView
-    style={{ flex: 1, backgroundColor: "#fff" }}
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-    keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-  >
-    <ScrollView
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: "#fff" }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
     >
-      <View style={{ marginTop: 25 }}>
-        <Text style={styles.title}>Adicionar Compromisso</Text>
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={{ marginTop: 25 }}>
+          <Text style={styles.title}>Adicionar Compromisso</Text>
+        </View>
 
-      <TextInput
-        style={GlobalStyles.input}
-        placeholder="Título do compromisso"
-        placeholderTextColor="#999"
-        value={title}
-        onChangeText={setTitle}
-      />
+        <TextInput
+          style={GlobalStyles.input}
+          placeholder="Título do compromisso"
+          placeholderTextColor="#999"
+          value={title}
+          onChangeText={setTitle}
+        />
 
-      <TextInput
-        style={GlobalStyles.input}
-        placeholder="Descrição"
-        placeholderTextColor="#999"
-        value={descricao}
-        onChangeText={setDescricao}
-      />
+        <TextInput
+          style={GlobalStyles.input}
+          placeholder="Descrição"
+          placeholderTextColor="#999"
+          value={descricao}
+          onChangeText={setDescricao}
+        />
 
-      <View style={{ gap: 20 }}>
-        <TouchableOpacity
-          onPress={() => setShowDate(true)}
-          style={styles.datePicker}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.datePickerText}>
-            {date ? `Data: ${formatDate(date)}` : "Selecionar Data"}
-          </Text>
-        </TouchableOpacity>
+        <View style={{ gap: 20 }}>
+          <TouchableOpacity
+            onPress={() => setShowDate(true)}
+            style={styles.datePicker}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.datePickerText}>
+              {date ? `Data: ${formatDateDisplay(date)}` : "Selecionar Data"}
+            </Text>
+          </TouchableOpacity>
 
-        {showDate && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) => {
-              setShowDate(false);
-              if (selectedDate) {
-                setDate(selectedDate);
-              }
-            }}
-          />
-        )}
+          {showDate && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setShowDate(false);
+                if (selectedDate) {
+                  setDate(selectedDate);
+                }
+              }}
+            />
+          )}
 
-        <TouchableOpacity
-          onPress={() => setShowTime(true)}
-          style={styles.timePicker}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.timePickerText}>
-            {time ? `Horário: ${formatTime(time)}` : "Selecionar Horário"}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setShowTime(true)}
+            style={styles.timePicker}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.timePickerText}>
+              {time ? `Horário: ${formatTime(time)}` : "Selecionar Horário"}
+            </Text>
+          </TouchableOpacity>
 
-        {showTime && (
-          <DateTimePicker
-            value={time}
-            mode="time"
-            display="default"
-            onChange={(event, selectedTime) => {
-              setShowTime(false);
-              if (selectedTime) {
-                setTime(selectedTime);
-              }
-            }}
-          />
-        )}
+          {showTime && (
+            <DateTimePicker
+              value={time}
+              mode="time"
+              display="default"
+              onChange={(event, selectedTime) => {
+                setShowTime(false);
+                if (selectedTime) {
+                  setTime(selectedTime);
+                }
+              }}
+            />
+          )}
 
-        <Button title="Salvar" onPress={handleSave} />
-        <Button title="Cancelar" onPress={handleBack} />
-      </View>
-    </ScrollView>
-  </KeyboardAvoidingView>
-);
+          <Button title="Salvar" onPress={handleSave} />
+          <Button title="Cancelar" onPress={handleBack} />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -166,15 +178,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   datePicker: {
-  borderWidth: 1,
-  borderColor: "#ccc",
-  borderRadius: 5,
-  padding: 10,
-  marginBottom: 15,
-},
-
-datePickerText: {
-  color: "#000",
-  fontSize: 16,
-}
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 15,
+  },
+  datePickerText: {
+    color: "#000",
+    fontSize: 16,
+  }
 });

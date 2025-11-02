@@ -36,6 +36,14 @@ export default function RegisterScreen() {
 
   const formatarData = (data: Date | string) => {
     if (!data) return "";
+    
+    // Se for string no formato YYYY-MM-DD, formata diretamente
+    if (typeof data === 'string' && data.includes('-')) {
+      const [ano, mes, dia] = data.split('-');
+      return `${dia}/${mes}/${ano}`;
+    }
+    
+    // Se for Date, converte normalmente
     const d = new Date(data);
     const dia = String(d.getDate()).padStart(2, "0");
     const mes = String(d.getMonth() + 1).padStart(2, "0");
@@ -46,11 +54,13 @@ export default function RegisterScreen() {
   const onChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === "android") setShow(false);
     if (selectedDate) {
-      const dia = selectedDate.getDate();
-      const mes = selectedDate.getMonth() + 1;
-      const ano = selectedDate.getFullYear();
-      const formatted = `${ano}-${String(mes).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const formatted = `${year}-${month}-${day}`;
+      
       setBirthday(formatted);
+      setDate(selectedDate);
     }
   };
 
