@@ -20,11 +20,11 @@ https://expo.dev/accounts/vital-code/projects/careon-app/builds/6dd2c458-9b79-4e
 2. Clique em **Install**
 3. Conclua a instalação no seu dispositivo Android
 
-## ⚠️ Aviso Importante (Erro 500)
 
-Caso o aplicativo apresente **Erro 500 (Internal Server Error)**, isso pode estar relacionado a indisponibilidade temporária do backend ou do serviço de hospedagem.
+Como o projeto utiliza serviços em suas camadas gratuitas, existem duas condições para o funcionamento inicial:
 
- **Se isso acontecer, entre em contato com a equipe de desenvolvimento** para que o problema possa ser analisado e corrigido.
+  Backend (Render): A API entra em modo de suspensão após inatividade e pode levar cerca de 50 segundos para responder na primeira requisição.
+  Banco de Dados (Supabase): O banco de dados é pausado automaticamente após 15 dias sem uso. Caso o aplicativo não consiga autenticar ou carregar dados, por favor, entre em contato para que possamos reativar a instância no painel do Supabase.
 
 
 ## Tecnologias utilizadas
