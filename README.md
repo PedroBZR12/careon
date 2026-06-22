@@ -24,6 +24,7 @@ https://expo.dev/accounts/vital-code/projects/careon-app/builds/6dd2c458-9b79-4e
 Como o projeto utiliza serviços em suas camadas gratuitas, existem duas condições para o funcionamento inicial:
 
   Backend (Render): A API entra em modo de suspensão após inatividade e pode levar cerca de 50 segundos para responder na primeira requisição.
+  
   Banco de Dados (Supabase): O banco de dados é pausado automaticamente após 15 dias sem uso. Caso o aplicativo não consiga autenticar ou carregar dados, por favor, entre em contato para que possamos reativar a instância no painel do Supabase.
 
 
